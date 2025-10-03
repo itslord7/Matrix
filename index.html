@@ -1,0 +1,323 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <title>Matrix Vault Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="matrix-background"></div>
+    <div id="particles-background"></div>
+
+    <div id="login-screen" class="screen active">
+        <div class="container">
+            <div class="logo-container">
+                <img src="Matrix_Vault.png" alt="Matrix Vault" width="150" height="150" class="logo pulse-effect">
+                <div class="glow-effect"></div>
+            </div>
+            <h1>MATRIX VAULT<span class="pro-label">PRO</span></h1>
+            <div class="login-form">
+                <div class="input-container">
+                    <input type="password" id="master-password" placeholder="Master Password" autocomplete="off">
+                    <div class="input-focus-line"></div>
+                </div>
+                <button id="login-btn" class="primary-btn">ACCESS VAULT</button>
+                <button id="create-vault-btn" class="secondary-btn">CREATE NEW VAULT</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="vault-screen" class="screen">
+        <div class="header">
+            <div class="logo-title">
+                <img src="Matrix_Vault.png" alt="Matrix Vault" width="40" height="40" class="header-logo">
+                <h2>MATRIX VAULT<span class="pro-label">PRO</span></h2>
+            </div>
+            <div class="actions">
+                <button id="add-btn" class="action-btn" aria-label="Add new password"><span class="icon">+</span></button>
+                <button id="export-btn" class="action-btn" aria-label="Export vault"><span class="icon">↑</span></button>
+                <button id="import-btn" class="action-btn" aria-label="Import vault"><span class="icon">↓</span></button>
+                <button id="settings-btn" class="action-btn" aria-label="Settings"><span class="icon">⚙️</span></button>
+                <button id="logout-btn" class="action-btn" aria-label="Logout"><span class="icon">⏏</span></button>
+            </div>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search passwords...">
+            <div class="input-focus-line"></div>
+        </div>
+        
+        <div id="password-list" class="password-list"></div>
+        
+        <div class="status-bar">
+            <span id="vault-status">Secure: All entries encrypted</span>
+            <span id="entry-count">0 entries</span>
+        </div>
+    </div>
+
+    <div id="add-password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ADD NEW ENTRY</h3>
+                <button id="cancel-add-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="input-container">
+                <input type="text" id="new-title" placeholder="Title" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="text" id="new-username" placeholder="Username" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="password-input-container">
+                <input type="password" id="new-password" placeholder="Password" autocomplete="off">
+                <button id="new-toggle-password" class="toggle-password-btn">SHOW</button>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="password-strength" id="new-password-strength"></div>
+            <div class="password-meter">
+                <div id="password-meter-bar" class="password-meter-bar"></div>
+            </div>
+            <div class="input-container">
+                <input type="text" id="new-url" placeholder="URL (optional)" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <textarea id="new-notes" placeholder="Notes (optional)" autocomplete="off"></textarea>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="modal-buttons">
+                <button id="generate-password-btn" class="secondary-btn">GENERATE</button>
+                <button id="save-password-btn" class="primary-btn">SAVE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>EDIT ENTRY</h3>
+                <button id="cancel-edit-btn" class="close-btn">&times;</button>
+            </div>
+            <input type="hidden" id="edit-id">
+            <div class="input-container">
+                <input type="text" id="edit-title" placeholder="Title" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="text" id="edit-username" placeholder="Username" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="password-input-container">
+                <input type="password" id="edit-password" placeholder="Password" autocomplete="off">
+                <button id="edit-toggle-password" class="toggle-password-btn">SHOW</button>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="text" id="edit-url" placeholder="URL (optional)" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <textarea id="edit-notes" placeholder="Notes (optional)" autocomplete="off"></textarea>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="modal-buttons">
+                <button id="update-password-btn" class="primary-btn">UPDATE</button>
+                <button id="delete-password-btn" class="danger-btn">DELETE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="export-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>EXPORT VAULT</h3>
+                <button id="cancel-export-btn" class="close-btn">&times;</button>
+            </div>
+            <p class="modal-description">Enter a password to protect your exported data:</p>
+            <div class="input-container">
+                <input type="password" id="export-password" placeholder="Export Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="password" id="confirm-export-password" placeholder="Confirm Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="export-text-area" style="display: none;">
+                <p>Copy the encrypted vault data:</p>
+                <textarea id="export-text" readonly></textarea>
+                <button id="copy-export-btn" class="secondary-btn copy-btn">COPY TEXT</button>
+            </div>
+            <div class="modal-buttons">
+                <button id="confirm-export-btn" class="primary-btn">ENCRYPT & EXPORT</button>
+            </div>
+            <div class="security-note">
+                <p>Your data will be encrypted with AES-256 and protected with a digital signature.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>IMPORT VAULT</h3>
+                <button id="cancel-import-btn" class="close-btn">&times;</button>
+            </div>
+            <p class="modal-description">Paste your exported encrypted vault data:</p>
+            <div class="input-container">
+                <textarea id="import-text" placeholder="Paste encrypted vault data here..."></textarea>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="password" id="import-password" placeholder="Export Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="modal-buttons">
+                <button id="confirm-import-btn" class="primary-btn">DECRYPT & IMPORT</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="password-detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="detail-title"></h3>
+                <button id="close-detail-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Username:</span>
+                <span id="detail-username" class="detail-value"></span>
+                <button class="copy-btn" data-field="username">COPY</button>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Password:</span>
+                <span id="detail-password" class="detail-value masked">••••••••</span>
+                <button class="toggle-btn" data-field="password">SHOW</button>
+                <button class="copy-btn" data-field="password">COPY</button>
+            </div>
+            <div class="detail-item" id="url-container">
+                <span class="detail-label">URL:</span>
+                <span id="detail-url" class="detail-value"></span>
+                <a id="detail-url-link" target="_blank" rel="noopener noreferrer">OPEN</a>
+            </div>
+            <div class="detail-item" id="notes-container">
+                <span class="detail-label">Notes:</span>
+                <div id="detail-notes" class="detail-value detail-notes"></div>
+            </div>
+            <div class="detail-info">
+                <span id="detail-created">Created: </span>
+                <span id="detail-updated">Updated: </span>
+            </div>
+            <div class="modal-buttons">
+                <button id="edit-entry-btn" class="primary-btn">EDIT</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>SETTINGS</h3>
+                <button id="close-settings-btn" class="close-btn">&times;</button>
+            </div>
+            
+            <div class="settings-section">
+                <h4>Security</h4>
+                <div class="setting-item">
+                    <button id="change-master-btn" class="settings-btn">CHANGE MASTER PASSWORD</button>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h4>Auto-Logout</h4>
+                <div class="setting-item">
+                    <label for="auto-logout">Automatically logout after inactivity:</label>
+                    <select id="auto-logout" class="settings-select">
+                        <option value="0">Never</option>
+                        <option value="1">1 minute</option>
+                        <option value="5">5 minutes</option>
+                        <option value="15">15 minutes</option>
+                        <option value="30">30 minutes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h4>Appearance</h4>
+                <div class="setting-item">
+                    <label for="animation-level">Animation Level:</label>
+                    <select id="animation-level" class="settings-select">
+                        <option value="full">Full Animations</option>
+                        <option value="minimal">Minimal Animations</option>
+                        <option value="none">No Animations</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h4>Data</h4>
+                <div class="setting-item">
+                    <button id="clear-data-btn" class="danger-btn">CLEAR ALL DATA</button>
+                </div>
+            </div>
+            
+            <div class="settings-section version-info">
+                <div class="security-info">
+                    <p><strong>Security:</strong> AES-256 encryption with PBKDF2 key derivation</p>
+                    <p><strong>Integrity:</strong> HMAC-SHA256 Digital Signatures</p>
+                </div>
+                <div class="copyright">
+                    <p>Matrix Vault Pro &copy; 2025</p>
+                    <p>Version 2.0.0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="change-master-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>CHANGE MASTER PASSWORD</h3>
+                <button id="cancel-change-master-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="input-container">
+                <input type="password" id="current-master" placeholder="Current Master Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="password" id="new-master" placeholder="New Master Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="password" id="confirm-new-master" placeholder="Confirm New Master Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="password-strength" id="master-password-strength"></div>
+            <div class="password-meter">
+                <div id="master-password-meter-bar" class="password-meter-bar"></div>
+            </div>
+            <div class="modal-buttons">
+                <button id="confirm-change-master-btn" class="primary-btn">CHANGE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <div class="notification-icon"></div>
+            <div class="notification-message"></div>
+        </div>
+    </div>
+
+    <div id="logout-timer" class="logout-timer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
