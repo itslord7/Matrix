@@ -382,6 +382,21 @@ function formatDate(dateString) {
     return date.toLocaleDateString();
 }
 
+/**
+ * Download file helper
+ */
+function downloadFile(content, filename, mimeType = 'application/octet-stream') {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
 // ============================================================================
 // RATE LIMITING
 // ============================================================================
@@ -752,6 +767,76 @@ async function exportVault(exportPassword) {
     } catch (error) {
         console.error("Export error:", error);
         showNotification('Export failed', 'error');
+        hideLoader();
+        return false;
+    }
+}
+
+/**
+ * Export vault as downloadable encrypted file
+ */
+async function exportVaultAsFile(exportPassword) {
+    showLoader('Preparing export file...', true);
+    
+    try {
+        updateLoaderProgress(20);
+        updateLoaderMessage('Decrypting vault data...');
+        
+        const storedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        const nonce = hexToBytes(storedData.nonce);
+        const ciphertext = hexToBytes(storedData.encrypted);
+        
+        const decryptedString = await decryptChaCha20(ciphertext, masterKey, nonce);
+        
+        if (!decryptedString) {
+            hideLoader();
+            showNotification('Failed to decrypt vault for export', 'error');
+            return false;
+        }
+        
+        const decryptedData = JSON.parse(decryptedString);
+        
+        updateLoaderProgress(50);
+        updateLoaderMessage('Generating export keys...');
+        
+        const exportSalt = generateRandomBytes(32);
+        const exportNonce = generateRandomBytes(24);
+        
+        updateLoaderProgress(70);
+        updateLoaderMessage('Encrypting export data...');
+        
+        const exportKey = await deriveKeyArgon2(exportPassword, exportSalt);
+        const exportPlaintext = JSON.stringify(decryptedData);
+        const encryptedExport = await encryptChaCha20(exportPlaintext, exportKey, exportNonce);
+        
+        updateLoaderProgress(90);
+        updateLoaderMessage('Creating backup file...');
+        
+        const exportData = {
+            encrypted: bytesToHex(encryptedExport),
+            nonce: bytesToHex(exportNonce),
+            salt: bytesToHex(exportSalt),
+            version: VAULT_VERSION,
+            algorithm: ENCRYPTION_ALGORITHM,
+            exportedAt: new Date().toISOString()
+        };
+        
+        const timestamp = new Date().toISOString().replace(/:/g, '-').split('.')[0];
+        const filename = `matrix-vault-backup-${timestamp}.mvault`;
+        
+        downloadFile(JSON.stringify(exportData, null, 2), filename, 'application/json');
+        
+        updateLoaderProgress(100);
+        updateLoaderMessage('File downloaded successfully!');
+        
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        hideLoader();
+        showNotification('Vault backup downloaded successfully', 'success');
+        return true;
+    } catch (error) {
+        console.error("Export file error:", error);
+        showNotification('Export file failed', 'error');
         hideLoader();
         return false;
     }
@@ -1850,12 +1935,69 @@ function setupEventListeners() {
         clearForm(elements.exportModal);
         document.querySelector('.export-text-area').style.display = 'none';
         elements.confirmExportBtn.style.display = 'block';
+        
+        // Add export as file button
+        const buttonContainer = document.querySelector('#export-modal .modal-buttons');
+        const existingFileBtn = buttonContainer.querySelector('#export-file-btn');
+        if (existingFileBtn) existingFileBtn.remove();
+        
+        const exportFileBtn = document.createElement('button');
+        exportFileBtn.id = 'export-file-btn';
+        exportFileBtn.className = 'secondary-btn';
+        exportFileBtn.textContent = 'DOWNLOAD FILE';
+        
+        buttonContainer.parentElement.insertBefore(exportFileBtn, buttonContainer.nextSibling);
+        
+        exportFileBtn.addEventListener('click', async () => {
+            const exportPassword = elements.exportPassword.value;
+            const confirmPassword = elements.confirmExportPassword.value;
+            
+            if (!exportPassword) {
+                showNotification('Please enter an export password', 'warning');
+                elements.exportPassword.focus();
+                return;
+            }
+            
+            if (exportPassword !== confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                elements.confirmExportPassword.focus();
+                return;
+            }
+            
+            await exportVaultAsFile(exportPassword);
+        });
+        
         showModal(elements.exportModal);
         setTimeout(() => elements.exportPassword.focus(), 100);
     });
     
     elements.importBtn.addEventListener('click', () => {
         clearForm(elements.importModal);
+        
+        // Add file input for importing files
+        const importContainer = elements.importModal.querySelector('.input-container');
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.id = 'import-file-input';
+        fileInput.accept = '.mvault,application/json';
+        fileInput.style.marginBottom = '10px';
+        
+        const existingFileInput = elements.importModal.querySelector('#import-file-input');
+        if (existingFileInput) existingFileInput.remove();
+        
+        importContainer.parentElement.insertBefore(fileInput, importContainer);
+        
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    elements.importText.value = event.target.result;
+                };
+                reader.readAsText(file);
+            }
+        });
+        
         showModal(elements.importModal);
         setTimeout(() => elements.importText.focus(), 100);
     });
@@ -2033,6 +2175,9 @@ function setupEventListeners() {
         document.querySelector('.export-text-area').style.display = 'none';
         elements.exportText.value = '';
         elements.confirmExportBtn.style.display = 'block';
+        
+        const fileBtn = document.getElementById('export-file-btn');
+        if (fileBtn) fileBtn.remove();
     });
     
     // Import modal
@@ -2061,6 +2206,9 @@ function setupEventListeners() {
     elements.cancelImportBtn.addEventListener('click', () => {
         hideModal(elements.importModal);
         clearForm(elements.importModal);
+        
+        const fileInput = elements.importModal.querySelector('#import-file-input');
+        if (fileInput) fileInput.remove();
     });
     
     // Settings button
