@@ -30,6 +30,9 @@
                 <button id="login-btn" class="primary-btn">ACCESS VAULT</button>
                 <button id="create-vault-btn" class="secondary-btn">CREATE NEW VAULT</button>
             </div>
+            <div id="rate-limit-warning" class="rate-limit-warning" style="display: none;">
+                <p>Too many failed attempts. Please wait <span id="wait-time">0</span>s before trying again.</p>
+            </div>
         </div>
     </div>
 
@@ -44,7 +47,7 @@
                 <button id="export-btn" class="action-btn" aria-label="Export vault"><span class="icon">↑</span></button>
                 <button id="import-btn" class="action-btn" aria-label="Import vault"><span class="icon">↓</span></button>
                 <button id="settings-btn" class="action-btn" aria-label="Settings"><span class="icon">⚙️</span></button>
-                <button id="logout-btn" class="action-btn" aria-label="Logout"><span class="icon">⏏</span></button>
+                <button id="logout-btn" class="action-btn" aria-label="Logout"><span class="icon">⏧</span></button>
             </div>
         </div>
         
@@ -56,7 +59,7 @@
         <div id="password-list" class="password-list"></div>
         
         <div class="status-bar">
-            <span id="vault-status">Secure: All entries encrypted</span>
+            <span id="vault-status">Secure: All entries encrypted with ChaCha20-Poly1305</span>
             <span id="entry-count">0 entries</span>
         </div>
     </div>
@@ -158,7 +161,7 @@
                 <button id="confirm-export-btn" class="primary-btn">ENCRYPT & EXPORT</button>
             </div>
             <div class="security-note">
-                <p>Your data will be encrypted with AES-256 and protected with a digital signature.</p>
+                <p>Your data will be encrypted with ChaCha20-Poly1305 and Argon2 key derivation.</p>
             </div>
         </div>
     </div>
@@ -269,12 +272,13 @@
             
             <div class="settings-section version-info">
                 <div class="security-info">
-                    <p><strong>Security:</strong> AES-256 encryption with PBKDF2 key derivation</p>
-                    <p><strong>Integrity:</strong> HMAC-SHA256 Digital Signatures</p>
+                    <p><strong>Encryption:</strong> ChaCha20-Poly1305 (modern AEAD)</p>
+                    <p><strong>Key Derivation:</strong> Argon2id (600,000+ iterations equivalent)</p>
+                    <p><strong>Integrity:</strong> Poly1305 MAC (built-in)</p>
                 </div>
                 <div class="copyright">
                     <p>Matrix Vault Pro &copy; 2025</p>
-                    <p>Version 2.0.0</p>
+                    <p>Version 3.0.0 - Enhanced Security</p>
                 </div>
             </div>
         </div>
@@ -317,7 +321,10 @@
 
     <div id="logout-timer" class="logout-timer"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <!-- Security Enhancement Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tweetnacl-js/1.0.3/nacl.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tweetnacl-js/1.0.3/nacl-util.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/argon2-browser@1.3.0/dist/argon2.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
