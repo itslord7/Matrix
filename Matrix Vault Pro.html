@@ -1,0 +1,3989 @@
+﻿<html lang="en" style="height: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <title>Matrix Vault Pro</title>
+    
+    
+    
+    
+<style>* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto Mono', monospace;
+}
+
+:root {
+    --primary-color: #33ff33;
+    --primary-hover: #00cc00;
+    --primary-dark: #008800;
+    --secondary-color: #000;
+    --accent-color: #ff00ff;
+    --dark-bg: #000;
+    --modal-bg: rgba(0, 10, 0, 0.95);
+    --danger-color: #ff3333;
+    --item-bg: rgba(0, 20, 0, 0.7);
+    --glow-intensity: 10px;
+    --transition-speed: 0.3s;
+}
+
+body {
+    overflow: hidden;
+    background-color: var(--dark-bg);
+    color: var(--primary-color);
+    height: 100vh;
+    height: 100dvh;
+    height: -webkit-fill-available;
+    width: 100vw;
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    overscroll-behavior: none;
+    position: relative;
+}
+
+#matrix-background, #particles-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.screen {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.screen.active {
+    display: block;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 1rem;
+}
+
+/* Logo styling with pulsing effect */
+.logo-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.logo {
+    border-radius: 10px;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(51, 255, 51, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(51, 255, 51, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(51, 255, 51, 0);
+    }
+}
+
+.glow-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(51, 255, 51, 0.3) 0%, rgba(51, 255, 51, 0) 70%);
+    border-radius: 50%;
+}
+
+h1, h2, h3, h4 {
+    color: var(--primary-color);
+    text-align: center;
+    text-shadow: 0 0 10px var(--primary-color);
+    margin-bottom: 2rem;
+    letter-spacing: 0.2rem;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.pro-label {
+    font-size: 0.5em;
+    vertical-align: super;
+    margin-left: 5px;
+    background: linear-gradient(to right, var(--primary-color), #00ffff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 0.1rem;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 350px;
+    gap: 20px;
+}
+
+.input-container {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+input, textarea, select {
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-shadow: 0 0 var(--glow-intensity) rgba(51, 255, 51, 0.2);
+    transition: all var(--transition-speed) ease;
+    width: 100%;
+    outline: none;
+}
+
+.input-focus-line {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+input:focus + .input-focus-line, 
+textarea:focus + .input-focus-line {
+    width: calc(100% - 10px);
+}
+
+input:focus, textarea:focus, select:focus {
+    box-shadow: 0 0 15px rgba(51, 255, 51, 0.5);
+    border-color: var(--primary-color);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+button {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all var(--transition-speed) ease;
+    box-shadow: 0 0 var(--glow-intensity) rgba(51, 255, 51, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: rgba(51, 255, 51, 0.2);
+    box-shadow: 0 0 15px rgba(51, 255, 51, 0.5);
+}
+
+.primary-btn {
+    background-color: rgba(0, 40, 0, 0.8);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.primary-btn:hover {
+    background-color: rgba(0, 80, 0, 0.8);
+}
+
+.secondary-btn {
+    background-color: transparent;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.danger-btn {
+    background-color: rgba(40, 0, 0, 0.8);
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.danger-btn:hover {
+    background-color: rgba(80, 0, 0, 0.8);
+    box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+}
+
+.close-btn:hover {
+    background: none;
+    color: #fff;
+    box-shadow: none;
+}
+
+/* Header styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(51, 255, 51, 0.3);
+    position: sticky;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 10;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+}
+
+.logo-title {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 1.2rem;
+    margin: 0;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.action-btn .icon {
+    transition: transform 0.2s ease;
+}
+
+.action-btn:hover .icon {
+    transform: scale(1.2);
+}
+
+.action-btn::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover::after {
+    border-color: var(--primary-color);
+    animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.search-bar {
+    padding: 15px;
+    position: sticky;
+    top: 70px;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 9;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.password-list {
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    padding: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--dark-bg);
+}
+
+#vault-screen {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+}
+
+#vault-screen.screen.active {
+    display: flex;
+}
+
+.password-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.password-list::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+.password-list::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 3px;
+}
+
+.password-item {
+    background-color: var(--item-bg);
+    border: 1px solid rgba(51, 255, 51, 0.3);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.password-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 100%;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-color), transparent);
+    transition: right 0.3s ease;
+}
+
+.password-item:hover {
+    background-color: rgba(0, 30, 0, 0.8);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.password-item:hover::before {
+    right: 0;
+}
+
+.password-item h4 {
+    margin: 0 0 8px 0;
+    color: var(--primary-color);
+    text-align: left;
+}
+
+.password-item p {
+    margin: 0;
+    color: rgba(51, 255, 51, 0.7);
+    font-size: 0.9rem;
+}
+
+/* Status bar */
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-top: 1px solid rgba(51, 255, 51, 0.3);
+    color: rgba(51, 255, 51, 0.7);
+    font-size: 0.8rem;
+}
+
+/* Utility classes for inline style removal */
+.is-hidden { display: none !important; }
+.is-visible { display: block; }
+.is-flex { display: flex; }
+
+/* Modal styling */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    overflow: auto;
+    animation: fadeIn 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.modal.is-visible {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: var(--modal-bg);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 0 25px rgba(51, 255, 51, 0.5);
+    margin: 10% auto;
+    padding: 25px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    animation: slideIn 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.modal-description {
+    margin-bottom: 15px;
+    color: rgba(51, 255, 51, 0.9);
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 15px;
+}
+
+.modal-buttons button {
+    flex: 1;
+}
+
+/* Password input container with toggle */
+.password-input-container {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.toggle-password-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+    padding: 5px;
+    cursor: pointer;
+    box-shadow: none;
+}
+
+.toggle-password-btn:hover {
+    background: none;
+    box-shadow: none;
+    color: #fff;
+}
+
+/* Password strength meter */
+.password-strength {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.password-meter {
+    width: 100%;
+    height: 4px;
+    background-color: rgba(51, 51, 51, 0.5);
+    border-radius: 2px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.password-meter-bar {
+    height: 100%;
+    width: 0;
+    border-radius: 2px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.password-meter-bar.meter-0 { width: 0; background-color: #333; }
+.password-meter-bar.meter-1 { width: 16%; background-color: #ff3333; }
+.password-meter-bar.meter-2 { width: 33%; background-color: #ff3333; }
+.password-meter-bar.meter-3 { width: 50%; background-color: #ffcc00; }
+.password-meter-bar.meter-4 { width: 66%; background-color: #ffcc00; }
+.password-meter-bar.meter-5 { width: 83%; background-color: #33ff33; }
+.password-meter-bar.meter-6 { width: 100%; background-color: #33ff33; }
+
+/* Loader progress bar classes */
+.loader-progress-bar.meter-0 { width: 0; }
+.loader-progress-bar.meter-1 { width: 16%; }
+.loader-progress-bar.meter-2 { width: 33%; }
+.loader-progress-bar.meter-3 { width: 50%; }
+.loader-progress-bar.meter-4 { width: 66%; }
+.loader-progress-bar.meter-5 { width: 83%; }
+.loader-progress-bar.meter-6 { width: 100%; }
+
+.strength-weak {
+    color: var(--danger-color);
+}
+
+.strength-medium {
+    color: #ffcc00;
+}
+
+.strength-strong {
+    color: var(--primary-color);
+}
+
+/* Loader visibility */
+.loader.is-flex {
+    display: flex;
+}
+
+/* Detail modal styling */
+.detail-item {
+    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(0, 20, 0, 0.5);
+    padding: 12px;
+    border-radius: 5px;
+}
+
+.detail-label {
+    color: rgba(51, 255, 51, 0.7);
+    margin-right: 10px;
+    font-weight: bold;
+    min-width: 100px;
+}
+
+.detail-value {
+    flex: 1;
+    word-break: break-all;
+}
+
+.detail-notes {
+    white-space: pre-wrap;
+    line-height: 1.4;
+}
+
+.detail-item button, .detail-item a {
+    background-color: rgba(0, 30, 0, 0.8);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 8px 12px;
+    margin-left: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.detail-item button:hover, .detail-item a:hover {
+    background-color: rgba(0, 50, 0, 0.8);
+    box-shadow: 0 0 10px rgba(51, 255, 51, 0.4);
+}
+
+.detail-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    font-size: 0.8rem;
+    color: rgba(51, 255, 51, 0.6);
+}
+
+.masked {
+    letter-spacing: 2px;
+    user-select: none;
+}
+
+/* Notification */
+.notification {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1100;
+    transition: bottom 0.3s ease;
+    min-width: 300px;
+}
+
+.notification.show {
+    bottom: 20px;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 20, 0, 0.9);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(51, 255, 51, 0.5);
+}
+
+.notification-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    background-color: var(--primary-color);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E") no-repeat 50% 50%;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E") no-repeat 50% 50%;
+}
+
+/* Settings modal */
+.settings-section {
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(51, 255, 51, 0.2);
+    padding-bottom: 15px;
+}
+
+.settings-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.settings-btn {
+    background-color: rgba(0, 20, 0, 0.7);
+    width: 100%;
+}
+
+.settings-select {
+    background-color: rgba(0, 20, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    cursor: pointer;
+    width: 200px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2333ff33'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+}
+
+.settings-select:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(51, 255, 51, 0.4);
+}
+
+.version-info {
+    border-top: 1px solid rgba(51, 255, 51, 0.2);
+    padding-top: 15px;
+}
+
+.security-info {
+    margin-bottom: 15px;
+}
+
+.security-info p {
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+    color: rgba(51, 255, 51, 0.7);
+}
+
+.copyright {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: rgba(51, 255, 51, 0.7);
+}
+
+.security-note {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: rgba(51, 255, 51, 0.7);
+    text-align: center;
+    padding: 10px;
+    border-top: 1px dashed rgba(51, 255, 51, 0.3);
+}
+
+/* Auto-logout countdown */
+.logout-timer {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 0.8rem;
+    color: rgba(51, 255, 51, 0.9);
+    background-color: rgba(0, 20, 0, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none;
+    animation: pulse 1s infinite;
+}
+
+/* Password health indicators */
+.password-health {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 0.8rem;
+}
+
+.health-icon {
+    margin-right: 5px;
+}
+
+.health-good {
+    color: var(--primary-color);
+}
+
+.health-warning {
+    color: #ffcc00;
+}
+
+.health-bad {
+    color: var(--danger-color);
+}
+
+/* Import file upload area */
+.import-file-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.import-file-area button {
+    margin: 0;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+}
+
+.import-file-name {
+    color: rgba(51, 255, 51, 0.7);
+    font-size: 0.85rem;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Export/Import text area */
+#export-text, #import-text {
+    height: 150px;
+    background-color: rgba(0, 10, 0, 0.8);
+    border: 1px solid var(--primary-color);
+    padding: 15px;
+    margin: 10px 0;
+    color: var(--primary-color);
+    font-family: 'Roboto Mono', monospace;
+    border-radius: 5px;
+}
+
+.export-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.export-actions button {
+    flex: 1;
+}
+
+.copy-btn {
+    background-color: rgba(0, 20, 0, 0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.copy-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(51, 255, 51, 0.2),
+        transparent
+    );
+    transition: left 0.5s;
+}
+
+.copy-btn:active::before {
+    left: 100%;
+}
+
+/* Loader */
+.loader {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    backdrop-filter: blur(3px);
+}
+
+.loader-content {
+    background-color: rgba(0, 20, 0, 0.95);
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(51, 255, 51, 0.5);
+    max-width: 80%;
+}
+
+.loader-spinner {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+}
+
+.loader-spinner::before,
+.loader-spinner::after {
+    content: '';
+    border: 4px solid transparent;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+}
+
+.loader-spinner::before {
+    border-top-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    animation: spin 1.5s linear infinite;
+}
+
+.loader-spinner::after {
+    border-left-color: var(--primary-color);
+    border-right-color: var(--primary-color);
+    animation: spin 1s linear infinite reverse;
+}
+
+.loader-message {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.loader-progress {
+    width: 100%;
+    height: 4px;
+    background-color: rgba(51, 51, 51, 0.5);
+    border-radius: 2px;
+    margin-top: 15px;
+    overflow: hidden;
+}
+
+.loader-progress-bar {
+    height: 100%;
+    width: 0;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .modal-content {
+        margin: 5% auto;
+        width: 95%;
+        padding: 20px;
+    }
+
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .detail-item button, .detail-item a {
+        margin: 8px 0 0 0;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        flex-grow: 1;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .detail-label {
+        margin-bottom: 8px;
+        font-weight: bold;
+        width: 100%;
+    }
+    
+    .detail-value {
+        width: 100%;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .action-btn {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .container {
+        padding: 1.5rem;
+    }
+    
+    .login-form button {
+        padding: 15px;
+        margin-top: 5px;
+    }
+    
+    input, textarea, select {
+        padding: 15px;
+        font-size: 1.1rem;
+    }
+    
+    .password-health {
+        flex-wrap: wrap;
+    }
+    
+    .settings-section {
+        padding-bottom: 20px;
+    }
+    
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .settings-select {
+        width: 100%;
+    }
+    
+    .logo-container {
+        margin-bottom: 30px;
+    }
+    
+    .header {
+        padding: 10px;
+    }
+    
+    .actions {
+        gap: 5px;
+    }
+}
+
+/* Animations for transitions */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -20px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translate3d(40px, 0, 0);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+
+.password-item {
+    animation: fadeInDown 0.3s ease-out;
+    animation-fill-mode: both;
+}
+
+.header, .search-bar {
+    animation: slideInRight 0.3s ease-out;
+    animation-fill-mode: both;
+}
+
+/* Minimal animation mode */
+.minimal-animations .password-item,
+.minimal-animations .header,
+.minimal-animations .search-bar,
+.minimal-animations .glow-effect {
+    animation: none;
+}
+
+/* No animation mode */
+.no-animations * {
+    animation: none !important;
+    transition: none !important;
+}
+
+button, input, textarea, select, .password-item, .modal {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Toggle switch */
+.switch {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    display: inline-block;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #333;
+    border-radius: 26px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: 1px solid rgba(51, 255, 51, 0.3);
+}
+
+.switch-slider::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: #666;
+    border-radius: 50%;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.switch input:checked + .switch-slider {
+    background-color: rgba(0, 40, 0, 0.8);
+    border-color: var(--primary-color);
+}
+
+.switch input:checked + .switch-slider::before {
+    transform: translateX(22px);
+    background-color: var(--primary-color);
+    box-shadow: 0 0 8px var(--primary-color);
+}
+
+.backup-status {
+    font-size: 0.85rem;
+    color: rgba(51, 255, 51, 0.6);
+    margin-top: 5px;
+}
+
+.empty-message {
+    padding: 30px;
+    text-align: center;
+    color: rgba(51, 255, 51, 0.5);
+    font-size: 1.1rem;
+}</style></head>
+<body>
+    <div id="matrix-background"></div>
+    <div id="particles-background"></div>
+
+    <div id="login-screen" class="screen active">
+        <div class="container">
+            <div class="logo-container">
+                <img src="data:image/png;base64,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" alt="Matrix Vault" width="150" height="150" class="logo">
+                <div class="glow-effect"></div>
+            </div>
+            <h1>MATRIX VAULT<span class="pro-label">PRO</span></h1>
+            <div class="login-form">
+                <div class="input-container">
+                    <input type="password" id="master-password" placeholder="Master Password" autocomplete="off">
+                    <div class="input-focus-line"></div>
+                </div>
+                <button id="login-btn" class="primary-btn">ACCESS VAULT</button>
+                <button id="create-vault-btn" class="secondary-btn">CREATE NEW VAULT</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="vault-screen" class="screen">
+        <div class="header">
+            <div class="logo-title">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAAA8AXHiAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAE5VSURBVHhe7Z0HmCRHleer2lZ3V7X33nvf5bpMez/t3Xh5JCEvIYzEx7FoDcfCHuYWIQErkMGbZVlYzALCCXk3MiONNE4j75CXxvTL+/8jI7trWsPt7S67B62K73tfVWVGRkbF++V7LyIjI23RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3RFE3R9N+WJh4e9o2/Ov/doSc2XT45WZCsN0dTNP3H0mlfrHONPzvz0YE3l4/1GFuNsLFghF/e9ODwXT3jOks0RdO/L216bGCu/9XZPX3GTsNvLBneIzPSdWRSvMaMETo2ZQw+MfK5pS958nX2aIqm/3vadJevZvD3E1/pN5aNgLHF8ByZE/fhGXEfhRyZEvdbm8R9bBr7Fo3wK9PPDBycunzozMo0fXg0RdPxKXSrpzb89NinQ6/PvBY2Nhu+YwsGgep6a1o8Mi/eI9PilwUAht/YpmAz5owQAOv5/dTB0K7BSwo9rixdXDS909PQfT0N4WfHrw68Nv1GCBbKB1C8hAbwdAGoTsBU8bNOcb07XSquapK+17ZLUHYILZlH5ZuCe5yFBZszvE8OP9X8vY7POkOOoC4+mt5JybDZ7AN7p4b7Xpz/auj1pbdCxjbEUQuG/+is+A5Pi/fYnHhlSRr2D0nGXxSKLWATmwfSZJPMxWzp+umQhGUnLNgyLBfd46R0HJ6ULgXYvNHx6IBR9Q8tt6eOpZ6P0+WaZ42mDZuGbwlXBB8bu9T/4tTdQVmGG9sBCwW3d2Re/EdmpfvYrAQAS8eLk5L/+RqJGY8RWweAckPaIHWQekizTfIuLhH3wxMSki3illlpB1imbJJOBPjdCPh9z24y6r7V8VzupQX/YKuwDaMK8WZNounPPrV8p6W4Y0/vqf6nR38YfHkW7m6r4UVg7j42h8B8Ruj2fMfmpRsWquvNaSn/YafEb0lU1klBBYgIU0xjjORMpUtcF2DjvkabxPXFSvn/qhPPwQnxyWbpkDnpoAvVVswjiMtgwbzGtNF2T9io/HLjg3kXFl1hS7e16OpF059RivXfPt7iOzB9ge/pqR97fz/zCq2HGjJA/KR6ebBODL4ZlPtooZ6blNJvtUjSaS6xddokvjdOspYyTOtUCSm1SXJXkrzryTHJmneKrQDbqiANEFixhJ54Kfl4vXQdmEb8dZIqky6y660J6XxzXDoPT4gHcPnhKn1Hp4yOu8MrLf/S8duW6+ov9nyiolbXO5r+lFLgYwGX584ht/fg5Fm+p6au9b4wu9v36oIRRNzE4QI/rJP/6ILhBUwqKIeV8iAg74I0HByS/GvqJH7eIbZ2QNIKAUh176uUzfePiK0cvwsh+TZJakuUk57sk5yFVIHFEVueuV3lqYEAtPjeeCn7aJN4HpiES92sztNxdJN0vDlmAvYGIRsHZHSVs6jjpOF7YeRI6JnR2/sfG/7k0MND82P/Eqj6sM0Wo/9eNP1Xp64PdyX7bh4td+8Z6+06OHGW95nJT/men/qF96WZJ7xvzgOirVAUQUKvTuYNz1EE4BDGT75jC8rV+WRROt6YlOqb/JL24QKxb4JbI1B0bbQ+tZBcm9ReWixz9wXEVoLfBCjHJolNibL1sZDkzKSJzYFthIuSBSFgFRBaOEAW64+RrHMKpPa7PumENeyii5QZaT+C+OtNWjEKgIO77JQpwwRtDjJt+F4ePxx8cXx3+Nmx7/Q+MfwXvY+ObRm4f8S76WcDRSf3ljl0c0RTZBq5baZk+OGZ9uH7J9oH90x39O6edofvGwmEHhoa7Nk7PBU4NLLQ+8zoKT1Pb3pP4MnJvwk+PX0lAu1veX4/c1vnS/OHul6de9OzwpgFgbGSZSWeFbi5owuAiCAhbjqKuAlurhtWg26p/bUpqb0nLLmfr5TE01LMXh6DcVooBuRlkEK76eJSbFJ/YanM3xsWWwZ+Ayp+JtTHy9JjAcRZsFhxZj5bshYCBiAViNWQFgghQxzmmEiSvL8sl6obvdL8AiwX6uUGaF3HpmDJaM3GAfuE+t761oTRemzSYPDvAWgeFZ9BjswYvlemX+t+aXp/8KWpm8IvbPpm+KmJK3sOjf1l7xNDF/UeGNoZ3tu3ENwTnArf1z/Sc+9AOHz3iJftPAEZ+mmgUKtg46WxT1cn9r04/XAvgAjBwgTfmje6j0COmmNAAXT3KUFYnBBgCaG3FoCoQBvHmLJAS2SoGAnioXtjj+7YknI93eihdctW8a4ApmempObXAcn+dLkk7EwSW0grXAfeCgCCQGuTDagyYiH4dNkk058q5TsLxJbGfRB8JlTFy+KTYckaRRxmxzZarUQtSaa4OpNl4p8CEt8ZZ7pInoNuktYM502YTJScj5RIzY/90vY4rBc6DR1qrGwWoMGivbVJ2mDN2mDJ2g5PSyuk5ci00Xp0xmhDG3UAsi60AWNFNTwC8WG7f1UYxwHCFQiO8b85Y/TJFiP84MQ/ajVsvNT7la7snlemXiY4/mPziHvmYGWmAco0PmcRVEMOK5G3iQIIQvcGZfgQu/jh2jiORPfmfRMu7uAmqf51UPKuqhXn+dkSuyneHCYgSLQetEwMuGmdiiG0RASCrowWJxVQUQgXYbFBmIf7M21iz7VLVm+qxBUAQAuqeC38Hgsgwy551ysjkhJAzIZj1PF0pTwfQeP5CRoAjxtKkNRzcqXgynqp+aVfmg+MAKopaQdktGqMAZUcm5NOWOFO9DaVoOfa9RY6Bm/CxcKtd1JwHLYb2G90HJ4y2tGmHcdmjU60K4dT3I9O3WhqYQOm3i958vtemXqJt0C6AUv3W5Cjs7A2M+JfmQMkiwoSui523X2wPn71uVm8EPfKorS/PivNz45LwyP9UvlrjxRcVydpH8wXx06n2EcBhB9KI0hUIF0dLRN7dUUQHSspCwSrlNbhktDfdkpMvmmlVsECNOmdLqk6rcgEjoDQJVIIG2GkGyRQgElJAiTGJhmBFNn+VEiS3QCLeViuE5IKIaB0tQRbx2JKGOPhAogdjpXkk1Il40NFUvCleqn4V7fUPzAgzYfGpf0VgIM40Y128Kj2WIaY7cXbTHT7HrrXFUCJC68LVrzrTQD5JsICtHfX/qlfmVrYgGn0+s6CvpenX+6GOffjCvS9Nintjw9Ky8Fhadw7JHUPDkjNPb1SdWtIyn/lk+IfdEr+dQ2S9clySftIkaRcko34yCkxi7BEw1CGF0LXRngoHG+CVXINOqX8gmJTebQUVCgVSwVT2fwEDAWjWXLSgUmJK4fbUhBosABP7bllMnV3nwkWgcLxMVkx0vfpVklvQ4xGmBBn2S2wCBncYybA2vpUUJI7ABZho3AfPwkkXSvhhpRuKZCy0/PNDgP/B+vP/8F683sXpBfnHY+TxC0p4jw3W9IvL5bsT1RL4ZdbpOT7nVLxC6/U3BSQmtvDUrOrX2r3jEj13hFpfGZS3G/B2r0Jaw+w3Psnf2tqYQOm0evDBT2vTL/sA1i8wjoeG5G40+LEvoie2SQUOoiGDENoddioDKzZ0OytWcIGp0Vi7MJ9vOLpYggQBQDUXVwj25+dMS0DFUmFRipZu7ncwXRZfLBP4qsAFgNwF+pBASCV5xbK4E3eNUsFGGPzY+XUg32SP5JuWi4G8BZY/I5tWUGXbIHFSmoFWNY+O/4brJkS1oFWDNs3fbdXRn8YNH+z7oz3WGdaWLpt/l/GZtbFQwD5v2mNuZ9tQWvHW01sM7SdfcQu9j675H2mTln8ToDVhdi048DkzdTBhkyj3wkXhF6eeoW9HcZI7fvHxDZrNohqIDakBQsbl41cuk7g0hJbE6R0KU9iygEBr366KgJE6wKF1ZxXKnP7+s3xJwKzCgAUTCFcgCBnIF0WHgyvgeVEeSkQAFB+Xr703tS5BhaUH5dHsHolfzTtD4MVcMnmJwFWS6IZ4KMsuw3KBlwUBRdBxzG913VK+BsdZn14Dsvt0lWjh5nYmCANZ1VIXANiOgs8CtuBwPGTrpXAUdh22v3n/VWFGl5pR8hBsDoPTNxKHWzINPCNgaLgy9OvsgtNsNr2j4p9Go0NC9T0N/XS/IFq02VFwsLfFAscXPHl0/ny4cNbxFEJIBhEp6AM1e3HJ5RbfW6xTO4JmOVwPxWvLAYVC9EQ5PRlyOKjAxJfgXJU3KTBAhCl5+VK4KaWNbDoCjNipPfTzZLekmyWt1qu/o4ys7vTZPvL/ZLYAHdN+LDvbWDRYuIc4S+3SeArTWY+VX8ttGD4nznhDHnPG9vE2YYeLbdbddFtk+p2SskO9FzZqyVghI7WDNDlf7gEYC1IB0IOZbEOjt+G82zMNPYvY8XBV2Ze87C7jKCzFbGAbdxsiOCXO8T/cd3IjHesHhchsNyXhiSnK002fRFBNxuY2wgUhXDg+Mqzi2XsEbgxxlK6t6ash7Ygqkx8Z4De/32fxMHFqWOTARUFZVRcWCg9d8BisS4RcZaqH93ZKrAaVn5HuY7yRGn76xqJyUY5PA/BIlDWuZlPu2LfZ5uk68pas0yUZ2eZ3KctWnqbS055eEySKxLMsrhdXQAQHFN7RonMPAjLzPpRGEvSSsOqF3yoWAJoYxOsBaPtsdE7cMzGTP0/nyjrfmXmTY8QrGVp3TMstiE0BGKp2LoYiSmAMk4EAxXD35ZC2chUBhvYAorbKcjjqE6UnHHEQdY2DdKqcvmb56AVYBlOlIFPO60VwYqzK2tWBcunjqfSYCFicmKkZDRfuURVFwUOjrXAilC6Kpvn4Pn0eVWgb50bVjaxOl4Sq2DZ+Jvn4af1HWXZ02LEWQXrGLmP5+UnzlF5ap4M39llWnO2m2XtYb0KPlikwZoVNzxE62PDd1IHGzIFfjtW5X917rB7ZdHwEKyHANYAGoJxAeMFxhZsHDYclUAFUZQLgVAp2J5anyydcJv2TEDARrcanp9ULD95PHt4VDYtHhVsyapybRJfADfIcyo3hPyUVIDD/QSClopgYX9StUPOfmZOsvt1jMVyeZ4IYOzpAKYkQew8NyHgPkJlgUXhdp6TLo/1sy4MntMS1oewsL7cz22WBefxOH/VabkydGe7mY/HMx/rC9eYr8FyH54TLy3WwbGNC1bo17O1/tcWjrplCWBtlpbdAIs9QQTq7o+2S/dH28yGtMDQYJmxCURvKx7PlFOfG5SYQoBluUlLcHzBULYMf0NfyZZCWK4lVA6gye/NluXf9EgcLSXPSahotVIhBJTH0t1S8NtRlyDbDw5J9gjAInQJyM+yLMG2bG+mbLl9TBIrYIm0pVr9VP8BouvT+T/qxX1Fvbk/8j9QUF5ybZKMfT8sSTXoYVr1tsBEO1SfkS+DdwAsCzz+B14EBOvyIgkRrLcI1pLRvm/iLhyzMVPvTfP1gdcWV7y8r4eucPNuxFh0hQCrBz2kwRs8ZiP/IbDYsPhdOJIpWw/0mK6T2yIVgv0VO/Jk6dGweZuGSmAepVhTlOVAvqKZLNmxv1fiOY7FY5OQn3BB8XmD2eL/JJRmBcuwCokAa2lvj2QNpZr1JFgsyxKUmdOTLtufHJWkJvQK8VudT8VYWlgHgoV9wS+0IIDHOZgv8j9QUJ7LnSzbnx1SnyoPj+N/sSzWqUUyfJd7bRvbjfWFK6TFCqFXaFqsJaN179jdOGZjpp6bZxtCr3GUeNHgrZgWC6xqmwSuaZWea9DIVNAJwcJ3DVa2P102/cqP4B3bTwBW6ZYsmX4QFisL+6kMlsXjteWgW2K+vMlUWXjQB7Ai4hwK9lWfXyJLuwfNmIXKgttKrAFY+3skc9Cp8piWR9dN1zcz4JKlgz2S1Awrwzw8H+pvicqrwfJf2SKBq2ClmY9gcDtF//+UrkSZ3+czwWLduY//V+dzlCXCLSOWxHe7VX9eBATr8mIFlvfwvBp5b987unHBCt0y1hh6fZ63IAzOOmh7EGAxxkIXOfDlVgleg+49G94Ci42JRldK4XbrykT8YUfXX1mXSKgoOCZvIl16ftRoujMqIUK56jvLQrl5kxky90C3xBWbrpC9MtUzQxmV5xfIplu7jwMrviROJu/xS3pIWxDWh2VawGBbpt8lCwfC4mg83mJFnl/VCedofG+VtFyOXmEkNNaFgv/vdDtkfi/A6khaOx/bhXnp/nT7qHiMv/l/LbAuK5YwpwkBLE5y7Ng7eg/ybswUvHW0KfSGBdYywEKM1YeGKLNJ7zc6pfdr+urVYEUqJBIsO3pxiUU6QI6EisfRnSG2sufgk+ARRCggUrGWK8wOpcv8zX3o5ZlgqWMp2F95fr6M3QI3ww4FwWLsAqU56uIlxrpJzXJYJkWXmelLlaWnB9AzjRjH0ue2zq/AYMBNsaBgPVkGRX93uVNkx++HJJXjWCwL/99uxWiQtDqn1C6XnBCsgsuKpAdt3H1kTgIE65GRXShjY6bue4abg2/MGf6VeYC1CLDganrQEIixOPZUdUrhcVfscTBQIVp5BX05Mnd3j8TS0rCxtaVR1gYNzDGkBA566oFGS7lKqVY5UIzdZRdXQwp6l9jHIQeOvPMT+yrPz5WR3wF0KopQWUIFU5GsI8tS5eqyUW58TpwUL+SqwVT1X/S51flpYZiPYKCMhLIEcdTAsllgMb+uG38nFMdLxxUNEp+L/8LtkftRj/qTSmTbgwNrvUuCqsEqhMXqA1gBgBUkWA+PPIBjNuas1M7bx1sCAMsHsDiTofUBNApv5/DeH5XGBrOskFbIqjL4m42KBi2eyZH5J3ollrdiIsBSVgf7q9DgE7f6zC69Bus4YTk8BwGhsnjuNJwrlTACCJyz5qJC2XQH4jQqi+XAGsTmxko/4qLUFlgQq6xIsCw4CB/rwv+D7cf9jwgwuv++XbxXtZr5I8HiJ0Fh/biPv7mf+yKOr0QnZeoOr1l/WqsIsIpgsfrgCruPzAOsZaP9oZGHcEwcZOMl351jrcE3F3g7R4MFi0Ww6hAY1+PqrcTVy6svAqz1cKEYKZzNlpnHwhJXDRDYyHBfkWDVnF8m03uDZiO/DSyUR+Xgu6vZKaG/a4XbxG81s4FgmYOfuSMZUn8J3AwVzGELfMYVx8ppzw1IDgNmKpz1igQLklTikI73VMHKoBy9Tf0H/T0SjOB1beK9PiJ4536WyTz4HZsdJxVT+RLHCYgaKuUKNbwVJ+XBXXeY9SOEEa6w8ANF0ssY68gCYqzNRtuDo3twTAJk46XQLhMs7wrBWpI2gsVZncU26b+mW0J/j5iGDatdIQ5Zg8tSDLYVz+XK/CHERpVocAVWzPEW65wiGX8IV3IkWBYESsx8OcPpsvRgD3qFKIeKcSEucuI7rRd/sw6Mr6g4WqzCGNm2p1dy+vQAKcoxwdf1w7asTpec8cSQJNeuH24wv1vQcJ//S63ivg4dFu7j/7DqyTz4TG1JkXcfnJSUarOHSYutrLYF1sl5MnIzLJ4VqxEs3tbJB1jvL1Yxlhm8A6z7h/fimI05Xz60a6o19NbSKljt92uwKmzS9+1O8XO4gQ1rxS9UDBtUKW5NeUWb8mXrC5MSV6LjGIC1Gnhjf+W7C2XkIUBKKBRYJpzHKRj5sgdTZfoOvyRUAigqxonPFFgtxFp2BOhxRYBMuUkIwcqPkdMOTEhe75rFWi1Xl5nemiLbHghKyjqwzHNDIsDyAayuLzeb+TRMSvif8OmEyz3l4RFxNpjB+9vAWi6U8Z/jf6qLCxIJ1vtKYLG2rFqsll2DB3DMxlzXK3jXSFvorUXDA7B4E7p9lwaL41hfqZeuqxtNBdHyaEVRTMVp5aFR4/PjESAXSkw6tjkgSYCBcGmLxTGo8ccRY/FKVpZgHVhUDvLlDmXK4kN9ksBxLB6bjHKSARPyVGwvlpEfdq+BpaVoPEcSCpFfK3+1XF1fV22SLNwZkKSqBLP+Ghjz3BD+5oWDfaGve6TrOh1j6XyqHH7Hp7M5SU46NAqwTmCxAGd8TrykNjhNqE5osbYIHzDxA6ymXf2HUIYLsvFS8K7+tsBb80bnyqLhhsXquHdIbEE0RBXcwnWN0vH3dWbD/iGwLKXoK141JG8aE6zEWNMdotH5IETVRUVmOREWa1VxVAzKSqlNFu+nWiQ2B2UkI48CC99RdvUlxbLp3pDpTgkVAaPwvCyX9YgExio3xS5J1YnH3ytcDxa3I2/BbL7kz+eZx1LW5YnNjZGm91VKQh7qhf2rPWOeR/9XVR+cy64sLkSDVfCBEglxCjMsFsFqvLfvCeTdmEstKbDenDE6+Mwfwdo1bD6GVQqLdUOndHyqfk1xxykEn/ytG5VjWEWjWaaiOVaVBCsDy6XAYgMTIJbDoYM/BBbdprYcqsPA3mBKvNgJKbaVXZgvQ7d5TLB4HvQMY6Do9gurJImdDJYRCYMul0DFFaI+VidE/4+1fBBaUULAc1NYx8j9qn4Q/hdrv/4fSnQ7pLW6pGxroXkulscOCMFSwTvBWlZPMPHxuIa7+55CWRmQjZdMsKaNjpVZo4uu8H6AxSm1tTbJGEmTNL/LbCBaIqvR0YirLoCCbcUT2XLqEyMSV0agsI3ukEqkoMFTG13SeGGFaWmUQiBKcfo7FQflJhU7pGwmX8VTarIgYixltZCv9MI8Gbytaw0s1Isu890vTqgpzVbdVpXNcrEty50qm+/sk8RKuEJug6xZNS36/CXTBRDLYkXsZ7nIk1CcKF1XNEtCCVwv86BHaI/FBcCeIc7VcG6VzHHIhsMhbDdaSQ1WwWXFEsTFuwrWnb3P4JhMyMZLqxZrZc7gmlPtD4yI3YeG4NxtKo9XKbv+uFIrJgoktVY/tAA5DqzJLNl5aEjia9HgCig0qAUW9pcu5svmQ2hwlkWweBwUe5w7Qr7C4RxZurdXYjnyTuvgAgwM3lnGOQDrDnTlLVcI2DnTdMeBAckb02Dp+M0UfMe27IBTth3qkaRGxEUaZJ73OLgIFvIO3OAR/1URwXskWNiW2uWSHb8fl5R2fd8R2yPboe7dZTJxJ+JAdlIiLRZnN3ygEGAtiAdg8bnMhtt7nsUxG3NRuOAt/W3B12eMdoDFhzTbHwRYtFiIsZrPqpTSSVy92qxvv71P6k4qMRuUioho0MKJLNm6H0F3HcCici2oNFgly9ky8xDcGMHifh5nKZbK1uXkDmfI+K0eieUsCUKthhtMsMrPLJCR29DjosIssCrjZNvevnVgRQi2ZQVTZGG/bw0snMsCaxUuDVYQUHV8psYsi3UiVNyv6+dqT5LFfSFJ6YDrteptCfbXnFUqo7fpBz4ssHghwGLlX1YoAYJ1mBZryWi8LfwcjsmBbLwU+vVAa0iBNWu0yRzAGhU7Y6ximyz/oE8Cf40eEi0MFDn9c69Ubi0wG52KoFCR+F00niXL+4ISVw1XyO3rwMobz5CBn7eZkFqxiVIqv0O0YnJ6M2Tstx6J4fQaul8XoOI4VkqMcmWpnbCYLEPFcnBNVfGy9ZlByRlNXauXBZUuMzvklPkDAKtODzdwO867Chbz8jhsa/1wpdR9oDiiLO6H6P2u9mRZ2q/B0nnUAKkF1tllMnKz7v2y/hTtCnkTmrfNOG2GrrDxlg0MVs9PB1uCrwIqWKxWgNW6GxaLvUKANfePYfH+BdwCQYD1WPhFSKo3rwOLgt/5/Zmy/EhIYot0I/MYQsdPxlwAM4bujVDwtwVWpOKQNy47Vpx8MIIWiVe79ZROOoTH8dxUlI6xYhGUe7/YJM5WfUuH5awDK8uXKouP9YiDY2M8HvvWrJXOy+PoegkEP3kuHh9ZPxzrakyW7U8OS4o1BUflQd1YBn6XbimS8HcQB/J/sxyCxZvmBOuDpeopHU70U2DdrFxhNmTjpZ6fDjV0vzqzAmulLFbzIwCrBw1ZZpPO99dL5VKR2ThQdAHgSSlFg7KRIwUAxWbFqukpChxaKQUWyuEnfsfmxIqjFvESgVmvNAqvem63RLkSbGNPUfUybeJsSpZSWkzuI1gUuhkq2DqO9VFgsUzzdyygzO5LlxiO3mtX+TawuB0gJFYkqvn5qt6sk1U/lottMakxkj+crco8/j+YZfBGd3wRrSzKZ7sRVA1WwYfKhXPeOg7PmjHWb8JPo+4bM3jv/fFIdffLc0faubgF/H/LgXGxD6LRGLwTEjYOH4Nn41CBbGAqkIrgdwpB4m/uZ35rP8HS2yt3lsrMPT0mDMzP41aVAlFKZHfdKePXdYmd54SiVyfLoYza81DGrj4zTmM5gNQOl5kdSF97mGI9sKoeENaNMRvLw/bjoOIxOk/g6nbxff4EwTvry+Mp3MdzUaz9LIe/WT73WxaXwrYrRBx6RSXAWpS2IzPiAVi1vwhu3HGs3q/1lvtfmn2zw1hAr3BR2p+aUo+Pc7ghfyxTXHQxtBBwP63nlUPxcFNUAqcAxwNAwgMFOCuTpP2iSvXIu2pgS6FaYVXnFMsUYjDlxrh/PVj8jXzZI+h1PdIrMWUoh0BRUVpZ1RcjeEdgr0AnWICY3f4djwyv5AxkmAolDIQmQuG8Ce39H/USz0FNtd+0WMeBxTrh+MC1zeK7oWWtLFUG6sL64b8kFidKy9lVEs/H07gfYsZY5rlyujOk+fxK01JxyIHCC6EEYH2sSj1X2HZkGhZrq1HzrwHe0nFCNl4KX9VZALBe6QRYahWVF+ckbhauoNQm84ip2i4tU4q1F9nkjP3DUrldx1gcTlBg4Tt+F/Sny5nP96nHp5SyuI/K0gorPztfxh/WY1B/CCwoOmMgWRbv6pbYCms8TAvLuCBfBm7uMBVF2GFRE0ri5KQ9vZI/dKJxLAi2ZXa55LQnBiWJ86yYB/UzwdLC+hJenN/zhQbxXr8GFqFR41S6fmkel5z38qLqHarjuF0DxmPaLqmS5fv6TWtvgcULAaFFyadqJYiLl6vT+I1tRu2PvI/imCTIxku9n+xND74y/wwfoHSvzIvn1QVJ2IaeV5VNxn7ilub3lirLYC+3ydKubinZkms2OhUR4epygqmyZbfPfCaPjewAGIBPjbxjP8Ea3Y1eIYHgMZHKp6yC5ZTlO/ok3hpojbiRXXpunvTd1G5aPQ0WH2zd/uuA5Pr1wxQ8dyQwOC6jPUW27Q4BLH2vcD1YPI7/B9u7rq4X97X6Id1I+Fln/E7udMh2XGCuLlhuls/tEWA1X1Qi03d0r421sZ6Ir7iWRfnn6iXEi/fwtASNHUbD99wP45iNOW2mt7fM0fPy3AGOq7i5jvrheUk6HUF4hU023RiUtvfDrEPBdvyevtcrRZuzzUZXYGnB7/zuNNmxNyQJfLqGCuFtGIeeOoP9VecXyvj+TtNFWApTyteiFZM5lCY798xIfDGPxzYG7hTsq7ioUEZ2eU2F0RVqYXy1OiX6BGBxisumG93i4I1tQrT+3BZYyNv1pUbxfE3fhF4FC5+0svivSR3xsvRon6QSLB6HPJHDDY0Xl5gT/Qi/BRaXa8KFWvnlFoC1qNYVCxs7jbpvtj+IYzbmRD8ke99Lcw+q99MALD+sluscxCs1NinbWSRZAVgCBsmldpl4wC8Fi5FgoUE1XPHZcXBHGWJnz0tNmYkAC/vTOlOkcAuO5XFU0nrlUjEsB66t5hTEapxGjEBZHU+BArMG06QGFkG5GUKlFZdQGmdOZdb5Vsu0LArK4ao0KpDm+bF91WJZ59b1ypnKkrx5WGVuiyyLdcY2Liyy/NiQOOkK2Q7YFnlLp+X95TLzgJ6BQTfIT67fgJi19tudymIRLK5lX3V9M+e82yEbM/W+NHsHl3/sOjqnBvDSLwUAXJLHemgBMQ1ndI78qlsKxjVY6gpGY1JxVCh/c7vqSVpgaVfIniIVxf38vgoWP6kYfKdwu7YcKp91U5rC+4Y8F/dZ41gcHkDwfvI9/ZLR5zTPgTzH3cekRYE1i8nD8azbicCyACQILJ+i8ln7IYQMws5C/9e8klSKeI31V+fSYOE37zP6ONWIY1gsj+3HJ8obbdLwI68EuCrg4VnlCkuvbrgd59q4qefZyRu7YbE6AFZAliT7CgTocH2qQayhBjRQYkWCxGYydsLvSLDQ4EllidJ6UYWpQALhiAALeVPqUqRoJs90hQqs9YJjoCQHel2lc4XqsXgFrAUWJD4vXpLrHaayKIDPUZUgJx8aloxNAIvKZ30iwQIkWb50mbuVHQvEWBbMJwIL9coKpksue5g81qqXrpvpmvV2/gcKz6n2Q1hP5qHQmlJ4EbAt2xF//TYkfq5BdngGwft2I+9vq39jamCDpvBTs9/l+uu0WFyMtvDKqjWwuOowG4fCK9kay2GjRgTvxROZcsoLw5JQB+Vxn7ZYqpGxv+rUcpndM7jWK1xVnBYNAQcfF+8bkFiuKRoBFffVnVwh0z/tWwMLFiihKk42I+bJmERcyLpQUF7kE0Q5Pamy7alBSW7W7osgrAeLgGCf/8pmCViPvKk66jz8jnrbU2MksTBR7Iz7WC8ct2px+RswxeTiO+tHq8qLshJ5/Dbp3DUoXv0aFq5Bmn15yc9wno2bep6a/1wYppmL1PKh1dJvNpsLrSmwYOYBA2OYeijWwaknbEBLiVohhZOpsniwWxIa4CK4Xc0eRQNrsCpOK5Sx+30mqDyeitLWIxKsnJE0mbytW+I4es1jmZeCfXXnl8nMrT1rww1wNQmVcbK4p1cyJgAWy1Bg4bwWDDguK+yUpf3dktykb8NgHy3WmtXCNv0/3J+qlvYv6JvQljViHpaFfMm16BXePKbWcFDH4Xyr1hH/p3KxRAa+7llzg6wrwIodiBXPgQnh61Y6j0xxfVIj/azcH+A8Gzf1Hlr4SK8GiwvXVvzUba5EV44G5f09XHlxpbFy5hOzkj+pYywFFvbzE78Lp9Jk9oBP4tmlV2DRDWK/BdbpBTL6gJ7dwG1KEdhvgUVBvtzRdJm9P2yuj8V8lkBp1RcVyejNugwqDW6Vwf7y3gH0Jq21GyDrwepNk4W9AUlqOH64YRUuDQj3+a+ul7YvwGIz3ypY+jvKc7Y55OR9o5LCB1at83GfBrPx7DKZvNNvWipa53wIwEqYcojnWb59Y4ov7BTPG9NG8nzaN3HMxk29+2bfxVfhslfI1ZBrbw2rd9ewQWycvgI3GFcVK5sf7pG8mSxTEZFWCw1aPJcliy+EzcU8oABCFQlW5buKZPh+PUCqLdaqUqloQoDP5DqHtHyoai3GUsMN5r7Kiwtl4FaUQaXRzTCGQXnZ4XS9UBvy8o7AOrC4Ct+WJwYlkc88Ehiez4KKcLAO/B/4rDi5UEpP0xP9FFhaLLDaE2XrQ/2SwjsSFlg8lp8oux7/c/SW9rUQgmNYaMekbWnif31RPMfMl0R1PjtmxIXjrsExGzeFd01vUhbrGNchXZTmR0bNp6G5aCtnK0CRcTWxsrC7G2Blmg1NpbMxlYXg6LZTgjc0qZvNats6i1VzbrkMPwRXyPjMcoUsRytWxSnqOAiVz16hNYbF79hWeUmxDO9GGVb8Yn1a+VXHABeCmm2A43gOSFxWnJQuFaDjge0aIAusVbgJDgFmfSisx4nAAlDb9sIVcm4Xz2u5agp+N727TKbu1eNYaDc71ykFWBkXFUpwZau4j2zCxTsrbY8MGLYG29/hmI2bhm9dag8f3mrwXTcQXE3TEseF/gkWG0aDNfcQwJpONxua0NA6sEEJDz+pEM5IIAwI3u0O/TAFlOlqcUrB1py1/JFKgyiLhXy815jWmGLGKFS0BRfyZ4+kS9PfVK7FLwjeY/NiJfDxOnFyGosCHecFWBwCULASJAohsOrJ860Hi3kAE4cTEkvx39fXkd+RJ64gTnr+wY8AHm6VdWZ5PC8/WUd/ujS+t9wEnlaLq0cjXuV9wrAALATuvF/YcIvfgEt/r6mBDZp6r57MDr+69UWfsaDcoffwoiSdlGaCxcE9gMUpwPMP9Eju8BpYq+4OCuHAaBxv8lLpagyKrknHSfzNY6hcgveHwML+nO50OeX2IYnJh3VhPgssjqxTgSyDrpAuFeVyzvsZzw1IHldNJtiJAAtArYKFsh0lCdL6ngqJ45PQPA/PdyKwUHbosx0SuErfK0QdTReNPKyvqo+Zb/UCYZ0sePk/uZ37OUzD+KoK0gAXe22T8OWcniO8nbNkVHy7xcB5tyHvhk4xgd9vv58PUbr5mlzEWZmXF5lg6bEse55d0twuKAfwMJaJdHVQaPFwruy4acyczEc3wke2rP2QpPJkxDqIz+iuuG0dWErhUEjuUJps39279lCGBRYU5qpPMp94pjWwwALw2x4NIOjHdpYDsFjWak8NZWb5U+WkJwci7hWiPNRZQRUJFrYFr22TwFf1cAO2rYLFT/5OixFXq0ti+Ii9spAQ/hcej/+bWJYgaQgLVAeDi9pySe4OBPU/80kAYLkBFt+0X/jJKgPn6INs7BR4dsv3A8Z2o+vojJqMln91tfk2BppyXnk062xsXpW8NcKRcOtqhWJKZ3Lk9Cc3SSxXlCFY+hF75QpxXM27KmX+kRETCu02lIWxFMvfyJc7jB7cfQGJ4+wG5lMQm/tqEFjP3RIyR9BZDsGqRK/w4W5zarICC+5XWSwNA44jWEu7gxHLGOlzRgrPhfwe9Ap9NzSbdSNIav9aWa4ml2zdPy8p7RHrcVlg4Xf9maUy8a/oFdJi8aJEG9p7bdL54AjadQlgTQlf3JRxQd5h5N/4L9v0HVr42BpYC1L1s07zBQIczwJYfBmS74p2XK2If6hoKDe+KEESyxOVeyhEUL/94KjE10B5VBKtFT8paPDKM4tlfE/QdGPcpsBCHgUWRINVMJEpC4+GzUf1CS7B1HBWn1Yg07cFTHfLHiHAii+Lk82HwpI7pue8I3i3XKEFQ2aHS6Zu85s3tgnMOqgUPBqsjs/Uisd6xF6BdXz9XK3JsvT4iCR7TgxW4wVFMvFbt/miBbpBgJWyPVkCLy2Id2VOPEenxH10k+FYSOFT0BtzLlZk8j00u6MbPUOC5ZM5adndZ/YMabUAVkxRrGy+c5Nk92eYYEEJ3k+0SM8NaEQ0bMFcpmx+bFgSCBYb2YKKcKDBK84slBH26CywqPRIsPgbCnY1p0j4K+0SyzXZcayyeBQAUbE5X/q/ha48fxMuxGsxWXYJXdsiqZ16Goteg3QVLNSNa24lcd0GumHr3MyrZRUsnKPz03XiR3mss1mOrhv/E/antDhk6pEAwNKj+NxOsPg/sb/+vEIZ+1WHeeeC91sbYYU/mC89K9sAFS/aWWl/esCwd9t/x3bf8Mn785E2/+tbpAs9Q/fKtHhemZSELWg8goVYIbY0RjbfDrB6ABYDWDSo/6oG6f9ncwGMgpks2fnChLkyMRvaAouiwRq6D3nZm6MSANNajKOVx7yEhsqiqwXAq2ARCsZVBBNQMdahqKCeVoh5rHEsnt8SlmW5TsLIfKtgIa8FGPOhnNqzy6TpfVVmmQosfFrgIB/Xbpg/OCBOtwaL2yP2119QKMO/RIzGMUAOMiO+qrq2Xnplh3oFH58rrL/Va2D/tarhN3rqOrMrOfDC5sc9apYDX849L5mX5ZpXHWIFBu+Bj7olrU0/GY2G9H62VsLfNR/pSgBQpZP5EktlW0CxsSlQQO35ZTKxD7GHhtIC67gAGgqKwfEJ7O4zjgMEkWBxpZlkriMKN6im5wAqe3qMpNQlSwzHqNSsVuQlDJYAkCxPmszcGECMpYcIeC7rvARIn1vVWR+jfuP7aieA5UISiuJl8Bs+SeYyRszH7RFgNVxYIkO/gMUiWHxuAFa/9eZu9AhpsWbxuVmKr60xAPrlZsu/A1LoycUf+IxtRifACsuiVFxXZ4JFs85glArmVc+rHw3qu7JOAt+G26AVsm5SM7inq2RDa2WwwXOCmVL/vrI1JSnlUrSCaT1wfHYgQ8Zv9KrxKeZbBQv7qk8vkdlfI3i3rA/O4yhJlKUHBiSrL+KB1XXBe05vmux4cliSm7W7hFhQK7C5zQJI71/NZ21nuTq2XL1gKJH7ca56Pld4Y7cZuDcBxEXEpk+OCdd3ZY+ba4+mfyDbwDEzyP/OSKFH5j8YZAB/bEo9sdt6F5TIV8kxCGWvkADRStD9oDH9VzVK8FuwWIApGbFH9/ubJIaPRVlQ8Urmp3aHSvhdKR9yArD4UMTsrpC5DhbyESwFF/bVXFAsM3egTnSHuleYWM7luMOSM6YfpmDZFhg8B7Zl9jhlYT/iIj4IYlmoSLCsbYRRuUdL1oHFesBa8kEKxm3W/1iFGP+bKyBmDKatgpXxvlQJ873Yx+YRvM9L10sTRtxU/BHUa+P3CK0UvmluILiy3ehcmTE8CDJ9L01LPB+s4HgWLRbv3xEqChq95bJa6fxEk2pgLph24YE5SSzQ7oaNTrAsuAib5SL5O0K5Jlj4DQiyYV2m7wwcB5ZSKJTP5bjV4+sWWHCPCWXxsrjHp25e83h1PpZFYT0IVtgps3zEnqPzhIjb8bkeLAXIcWBBmNdydfie0pgi2++ckrR2va48tq1O9ON/Y11ptTlM04o6X1+F+Gqz+BBfceZI/a6gge2P4NhEyDsjtbw7lOF7fusLfBOY+9gM4qzNkvGhAnPIgfO2uQKMBRauWK6EHMObv7iKcwZccuHBWUmCa1JKJTyq0fG5Hi61D2VYUFGYD4rKhUvb8kif+Y5nHBcJVtl5+TJwKzoAdLt6uIG3YLY/3Sv5E9pinQCs7HCabH6x/7hH7O0nAGu1vgDKHLLAd5ZngQVx+Vxy0jNzkh5ArKnPZ1oswMV8hIqDowgfuFRB+93dCCuWxYceYVC2StFXmwx0hjbuS8b/UPIcWPxJN+Is77E5NMQWqfwndO8ZhNK0s1emg2ZlvdjYVDq2u9odMnNdt8Rnm5bmbWBRCRSCxeO4TQFApUD4G5JUniiN55aa7hb5ImOs8nPRlb8P8QvjKwriHc4T67yiSpx1sEbWuSLBgjhKE6Xhkgr1+L7ahn0WVAos5uVxrLNVT37XdVKi/2uKN0kW949KWre2WNhnQhgBFsMGBO+OpTjxv7gJlmpegeVFeOF8L+Ir5zsocLdS5+9GL+NEf8YENN3uxyckZgCNxgDeckGEC41cOFwoxZPFpvUgdFbDEoRIxUCZrsoUKZ/NN3uFkS6RiraA431EBsj8zXz8boGFcrL60qThskpzO89pBfHMb0GOfGuj5RDrPMzD/fzN/fjNl2GuukZd34zGNMnrzjR/R4quc4o7SWYPjIjLn2KWiX2mxYKwDoy9OFWGD/xeUaCWhiRUHL9qfW7EsI/GMnAfwLHvrFT5101B/+tLht9YNnwrC2oOvPM8uBnGWbz3RYAYxKNReZd/+J/7VIPzrV+OCnMoQCmejWwpBXnrz6qQ5Uf6TRCoJI454TMuLVay2tLM4QLETPH5cZJPxbL3xXJ4n5CfVBg/CQXPoSwnzguLldGcKrG0RiyXYAEUZSk1MJw2k+VNM+d4sV4RFus4sFDPvi/gP33bb0Jj/QdeHPp7clOSzDzM9bHWRt5XweL5+XQRhxrQ6Wn6iRtgMb6aUa86qf2Nx0BYwRVmNuZ6Df9GSu3YPfFk0NiqpyovS+FXGs3BPlotawIbGtFzVb2Ev9OhGrdwPEu23z144hX9oIDqdxXLxD1QGKGkNSIwUGpmR6qcsXdavfKWCs4fzpKz9k1IfIkux8pL10hrSLhYhgY4GTCfi+PzB9d6hceBhW2cynLywVG1br0CU4OloLLAYj3x3X91iwS/iv9kgaXKQV7ChfrYs+zibHOarlpDtwoW68qb8LBWCXOx0v30pHrcK3B0Sq2WnPepCgOdoB+j7Hdmavye94c9xk6ANSsemZPGfYPqLexqTItWi3BBye7PV0rwW+gVQgGFsxmy49CgJDRCeQRC34RW36EkziAdu1dP0uMAK90elJbhccq2faPiZMwC5eaOp8nOff3mEzVUFGHiKDzylk0VSuDTnSZUGlAOep52aEzyxmHlImCIBCsz6JStj/dIUissKredyGIRLGz3fK5BfNfrB1YJjsqPfBosZUkV7BAew+3Mw7yol52xKC7C/E+USp9slxDaMLyCHvarMxK/1WEgnHjnxVdWKryk5JKeI1sML6DqPDYtnFWacXmeabVo5jnbAQ3cdXWldH+9Xikzfwo9r31hcTQBCDa4mlaDTw1WxZlFMnqvxwSCytFXfFpnssw/1CMpfrgW5M0Zd8mWPShHg6WWAqKgDK5hOnevXm1Gl8O1IrbuG5Dc0QiwtFWywMoIpMjyYyFJbtUBPuRtYLGe+O6+qlE8X173iL2VB2UmVTnUc4Xq7gC3ESgKj4cltyNksPfbpGVXv4qvgkenpR9Wv+6mbgPu0UCd/Sj7HZqctvrOm0aO8JGwDgSeHoBV+7ugueit1UOEsr3/AFf4bSgBDZ8/maGWUFRLRVK5bGgCpsGqOqdUxnlLhzEWLRZjJigurT1F5vZC6R5zBmjOmEuWdofVM4zK7eE8Ci6co+a8QhnnwxTWYC3BqopXL8LMOdFSkVS8AsspS4fCktysh0IozEtgrHysK7Z5vtgiHr6ZgvstsJiH37HN1YL6PjgiCXSr1nEU/h9O465HnovS4P6WJbCCnjXAohvM+EiBYSu38U0U75zxqxOlyo+2/HLAONXoginvWEFX+fCipJwF5REsjmuhR1ZzTpk0XFyuFFS0KUe2PT4icYyNCJZucGW1oGwX4pKibbB6dGtUAl0JFJNSmSRDP+wyZx/gdyYXF3lgWBKLASiOJVQKLCi3+rwCGfpdu9k7JVjYnlgGsPb1SXa/njYTCZaGId3nkoVD/eZEPwsm5o0Ei8ehvpkDGZLF9/KsQkXR+5Hf1ZQiCwArkS4feUyrjDx8wScn9XlsUov/E5ZtCNp5z3VO2vaPiH0gxrAV2a5k276jU7wn/ozg/mnDZyyqe4dcn7zux7AWvMXDN4PRajHWodIBmaMsQcpmCsyel5rxScE+igYDxZq9OT6Cb80uxf4Y9cIBbrep3l1uWK8BgThs1RVCqVxYpJ9gESrVM4RiM+zq5QSrT2gDgNXgnXDgN6fgZIRcZpnaVa65QgjhITi0poSN9WTdGJBbcHE/ykssTpDwNR51012djxcI3ToHkBEqJJ3ukPDLSxI4xjepTgGsRcm7qtoAdAbq268a9x2eMms+2fBsj7HDcHMcBmY99Oa8JJ2aYoLFWxa8zUPrQWHcRIVQObRKkWBBksodktntMvPpqcarQgCoSAb0hMgqhwqL2Fb5LoD18y6tTAhBIWDMT2DoOteDZVlP5mE5/H4isHQdXHDN6W7Uk8epcgC91Svk8Rw7YxlWnEjh/+f91A7U8VvNiKl2wlrNo81mpPP5UYmdjzdwIW7olWX+XSm5x/G/Qk8vI4jH1QerxTGZqu/BYlgzS9lD1IF0PFxXnl+/mUKBhU9LoNSGd1fJBGd/UjkEw3rCxxLlUmARChOlar5EdesVVOpFmBCUyYdT1dPMCioIXCpvKzW8q1ocpXBNtCrrwcJnQkGClM7rlxIwTwRYCi5aU+ZFPYPXdJiTFwmiPl6BxeNQd9YrqSHRfO0dLSeHXmitEFslbE2QwIvzsFLL4ldTZJak5JuNDB8MdHguZZtGk5lqKj/T+VbYOMXwACxegYHXFsSx02lOAKTVYiCNq5tvkzhj/5RSvgkLlGFBAyVVn1cmI3xCmOARrHUWTYEFBeeFc+T0vbMSx6UimY9rvNN1pkKYh66Kg7QsBxbKUZUoZz4PdzMY8YR2JFjYlhXIkFOemTKHMAjRicDiccgbuKZJgl+JGMey4OIn8qR0OWXzvROS3ImYkHWg1aa1arFJ6Q11uPi2Aqo56T42J55X0R7bHIatxPYiytuYy27/R1NiT/INvueWDJ/Mw2pxoG+z1P0QVzStVgOEzx3iSi6ay5CtB/slkUE4QdEj60o5UFLlecUyxAXJeJUrsCKEeQgNFJc7lC5bdvdLAl+oSdemXiuH+AmKLRjKEe//rDcVqgF11MbjvH2SO/KHx7EyAi41bdrBR+z/DbC8V9dL4AZYZZbFuhEoCsvF75Rwiux4fEpcfUmmC+TjcWiH+MUE8T4/qXqC/sO0Vtul9HudjLsMXHwfQ3nRtC61Vl3ZcqzX2GbwnpfvGBrv8Jw4z0bPibEWe0KwWvkLabK8NyyJXG2GkHBREAscKKni3CIZuB3xkRXwM4+GifvVEARA4TjW4sNBAGr2Cs3XyqEs5Kk9p0imuf6DDtwVWDVxsrjPK9nDaWY5LE/Do4DANoK1QOgbUCa3EzhYvhOB1fXZevFfqwdICRPXp2A56j/ZJDmUKEuPDkjKAMBiKMBB4zb0kL/jUQOinB7D+6zut7ZI4k6XYSuwPY+y8iDRtD6lDDq+0//8nHoZeRcfX8Jn+64+4WNNnHPEqzZ/c5osHghJPC2NBivyEXvlCh/wmVBRaI2gsOSyZOn+2/ZVC5UznSoLjwUk0Xrah4BSUEbNmQUydTfgJIQaUI5jLT8bkpyxE4BlWawgynxqUBLqcI5/A6yOzzWL9ytrzxWuLnzC+mqwFh7tk+QhxHp0gegJpp6bLf2Hd6AnuCD+I+aKPcU/gDttgrXKsL0fZUXTH0ie6o/WyYhxstF1dF44tsVR5dLPVaqeEOOtzCmXTN7sl9gigkAlQCGWxYIi80dypP6DFSZoDMrpDqHQTJ9Ltj8zISmcLYBtqYEU6fl2q17kA3lorSiAsHAkS9x/XW2WoYJ3m3p1r/uzNZLCoJ7A0LpYYPE7AGJPb+AXPnOMjXneBpaGB9sLl/OkmCtDW7CxDIplsdwOmdk1JI4BuPxmlNFnF+/9m1RsxZvNnCLT/vyYxC6iJ1isBkQ35htU/1gpps3+/dCucSMMc+/FVelfWZTgqwuSdGqyGtuyt9klgTEMYyiCE+kK2UvUsZaKjaxuOhSX4UuBBeiVZN4rZA+LcQuVyJ6fGmpAOYyx+O5CqwwreOe5KNymFU8IjusVWmVxeIDC34DGguo4sFhPdg5YHss6DizsS0f+Qrs4gyli78RvNyzxtS0yKCeJ7/CMeI5MwprPS9anig24SAP/ZwfKiqZ/I3myzsiU/qNbDf+xRelGgMqrtOOOAfNVv7RcDOQJByHQL8I0FW6X+II48z3PtDQKLBOUDFiquT0hSfYiZgEkMQUx4qxLEjvhUcMNcF8EC71IviCpeFkPaVBQlnozRTAd5TMPtq2ChWMJF87BhUZSmpLN4QbCqcFSEEWCBZh4B8DFd/noslaFFwofq2cvkAE74svUd6fL4Jtb0QNcUIOhPpmR2rsRA/YDqlLbLWizjbtw7R81ldiur7u+3ejDFRrgspLHZmQY3yv+vsm81cOb1LxBnQYF8B2DKj6C0mABas8qk4GfotFXBxaxn2B5k2X24W5J6oJrgWJzAMnmXwYkDi5OucuI9xXWX1AmM/eENJwQxFgJ5QlyxqEpNf2YeRQgBIVCsLAt0+uS5V295v1HwmS5SiXMB9HW0PN39dL/dT3cwLIoHBqh5eTovp69YO9BD/KeMTNgR1t40Rbtb4yJ46wk01pl4HKLpv/H5LCVxXviXg0+PGv0yDbAhW41XOLA69vEebq+j8iAlu9zJji0NBxlh5Lq3lcsg3d6tSvU+6G09C70AvcPSFKz2ZvM6UmTzbf6JIHxEN2RC8BpsPjalKHf+k2wWA6CeL5WbuehYckc0Cv6KbC0aLCy4Wa3PuqXJPZYCQy3Y//qkIRydRAc7/5MDWI8BO8si9todRnjpceJvThWYnjx8CHUG9plSE4RP2JOguWTJcm9HjFnG6AqtF2N80TTvytl2y7OPD3b6H9ruwThEkNHFnDVbpGOPUNiH4EC2EvkhEC6MrpEujMoqea9hdL7O1gCxkRpACWV41N2icvh+vA5Ys+hVaB1ccqOO4KSwKd0oFR7CsHCdwBRe0G5jHFREFoyVT56hXCvW/b3Scbg2sMNq2DxO7blcLWZgyFJsl4rB5iOg4rWij1VfHf/7yoJfaPV3M6Yi1DxP+Sjl9uA720o78NF0rfC/7+M2GpWAggJGtX/txv474/jHO/IGaL/2WS3VdturP5ikzGIKzZ4ZFG5Rd7GqPpZlxlvcfDUeviCLgsKrLq0UMK/AVgqNgIofMGlNcuByiZwyM+ncwoHMiWGN7PhfuzJgCGZkCGm6XBKAddApTtlflisxKoE2XywT9IH9Bx0wkJrQ9HgJADewrHM42Z9rgp/0zKynoirPFdWS5BvpuB2buMx7FDwFhYumuQdTul5YUndlO8+PI/4alHcr6MTc26qeaM507agWima/gMpz1ZhD9hedN80iHhrp3rTgucYR5u3StnXms15Wy0QK5iHRah6f7H03QzwqCwLLFgEPuCa2upSj/ArBXI/ASE8ToKFvIxvrJkJ3McytSuML42T6fsCktqt56ADJj7atQoWg3BCYpVJ98ZtlnA7rRXLxD7vF+phsXAB8Fy8MFgn3rqCm48diRXvg6Ow0AjYOV6lx6yyPldK90gX+FWUF03/qVRhW0qedxiDTy0b3XCFXsYaKwtqHlL2x4pNq8WYS0+vKT2rQLpvQOxCC5UKWPg6Xig+vSNVFneNSxJndwIULnPdcV6txGjXaCdUjNOg6KyeHKm9GOAqOCGEC5bLUZ+oHqqw4iuzxwchWBBnbbJ4P9IksZGrBOKTL7UMfLJDMjn/SkPX9MFy6fxEvWnF2BHRUNm6bdL484D04v9xdN1/2Hzusuxn+E89gKrS9iRaJTrC/kdJRbaP55ybq+ItrgLoA1wcne9+fV6Sz0XM44FCEJNwOjPngnNoQEFlBfZQekZ3isw/MiTJXrgyWJC8oSw56/EZ9RJxpVwLLFiWukuqZOreSRMsiJpfpS2XAoNWhrFVpMXCcXm96XL6sxOSyIl+BIsuGGVzfYil/ROSv7PAPBesE2M99XYN3q7hQ6eMGb2IEWHF+mGpeIPZjKuWpWFPj9jHEVexF5hum1ZtEk1/pFRo+0HBx8qMMOcgoYfIqzmIHlLnoTGJ3wFFuqEYXvFciIzuZtUNAhhYmPRAisw+1G+CBeVmD3EG6YAk8jW/kWABlKoLi9Ar9JnWinDB+iUVJ8rcDwKSUp9kwmQF7hHBe1bIJZv39JpP6bBMxk04lm/Kn7inX3K25qnfyu3R/bGeqK+d7hw9wNLP1sig7gV3HzEn73W9PC0Jp+Gc9YAq1/Y/zcaIpj9mSsUVe3fZN1qMoJykxnN8R7lazWZpf2RQ4pYQfHPNeM6EoBXgc3fsLRIYWJg0gDX30IC5Qh7BGoVrvC8sDloXKlvNxwIIsD4VFxVIL99XSLAoyM93+Jy0f0BcXHiN8RKt1Dqw+JTO4p6AOHgTOhKswhgZuSso2XxVHuMszrEiXKwnhxXgzvP/oliGjp4kIfQAA1x/YYUPlyxI2l/m8z8xruLbJaIDof8lyYHr22s7WP+bfiMkJ6tJgZzo1gvX0fbwgMQuQKGMuTgTgk8Js0dHiwPXl8aZB/vHJaVLP0wxkS5LD/eIgy/UXAULAmD4AoHw7xDT0O1pi8Up0TsODainfVATle+4WzraYi09EUQshjLpCjVYHOUfvMsvWUsZpjvl3DLWjzMWmgDkpbky+MY2FTcG4eaDK/NqGc2sL5fRPRKqe1D+xnyn859Mire1xIbjn+u6d9Lg6nV+ukTEI5x12nx/v8ROwv0x3qLSqDy6GyiTD39O/HxUkuj6oPQ0n1OG/tFr3qKhFXHRdULg5qrPrZD+n8AVMkhnnITjY3NjpP2vKiTJehwLMK2+oIlg4ThXc7L0fL9VvddQWSxaQAbv2QDrxqBkbkozYzXOBKVlhevOODdHel9aVE/YEKoAer1cy6LgO3UcUrHGqyrMPx9N/9WpO7E/8ZXA7lmjT8UkM0o4DNFwd6/Yp6BQWi7CRSXyvhsAi82GwunaCButGe/pqTgKny4Aw/uFACmhNEFSGhCLEQzsU8E789FSESJaIwJluUJ+55ACASVQhJHfaQn5iWOTahwSUwyLyBiQsSDgzzovSwZfWlaTGhlXqdgKcVXRDxrNHmCN7WWU5zb/cjT9d6XhxGHHW759tFymYtiT4hrnDbsGEHMlmjesGcPwZi7djx42UMLvVDw/CYJ1r5BLUBIcQoR8ag1SwMUbzBVL+colKrgo68Gi62SZ2n0qoetjoM5zsh7s/SEWzLo0WwZe5t2Eraj7HOo+DaiWpPRnrWLrA1R1tiM4ZtT8q9H035tibVOO2aSjoWdnAZfZRfcfXYBb3CkdB8fFcTqsDuGyHiOznvaB4rlqct/VnSqwNl0hgKHFSrJLanuqFM6hB0crRfAATWp9ipz6/Ihk9ennCteDhU8+ZDrwta61uWIEjcczWLcsFaDK+VCO9Lw2h5gK7u8I11zgPcBFKeetqAFAVW1biY6s//9OsbZZ5470w4HnltFb5AyABcCFWIVd9WfHxXVupukWaSl445pWA9YjezRNFh8KSzzf1EXLwqEJDqYCmqb31crorb2m5SEYsGDOeocsHUCcxJvQ68FiLIYYK6s3VZYPDEk8g3daKlopWkre0+SQQpdNSj9eLsNH5gH/MmKqBRUfcqyq6m7EdBN2DoAexXHL6r9F0//3tClp3vWGe98ieosnqffIeI/wJUVzEnx9UXKvKDbHuayHYAFX5pRTNt3tlQQG87RYhIpDEwCk/r1lMvjbbtOFESxYH2etQzY/HpbMiJvQq6u/ECz8zuxzycwDYUloBViM43iriff+CFXIJrU3NMkQLCuXGlKWCsLeX/lvO8Q+HmMA/NdxvinzL0XTn0oaShhyvNJ+9yjg2iqew1OQSbgYWofNUnl1rXnjmnAhqM+cc8rkXd3mQxm0LtY4FgCpubRU+n8DC2LFRgAvuSxRJn/pU2/JJ3wKJrpACkfiIZl9KPPeoMR3ASxCxZ4fLGX8dLx0/DKsBj+7V+akWw2A0v0tS9GPmswJe1W2Z1CPHv1foulPLAVjAvZnm24MAq7t6oEMWi/eWxyCUjt+4ZeEGSi9Ft38JZdM39FrPqVDl8eeIT8BSPV7ANavARatFcHip+od6niMwT1hIlwUxlPYltmfKtMPoOPghVtljxRQpb4rTQL7pqRfTlYuWkEFS+qWWcn7Vo2hAvVy230or9H8C9H0p5nioU6PbX/1dz1GgDMiVuZhuThKP6O69Z7HRiT1giyxBaD0mRSx1wAo3gS2hiAQqFddUiqDBIugWWBZQwgMyDl/ygHXSeHsVW7D8fFNcZJ7So55B8Brk/yPFknoFd4d4DKOsFCAXK0TCquV/YVSQ41Tldn+GbWOzqv6M0lliG1uK/54gxE8corhRSDvOYy4C8KgPnB4UYo/U226RcY/tC7sNXJAFdan/vwK2fTTsBnUEyx8Jlc6ZOanfnFyajMtFse9KFxvnjeTOTtBP/8YM2WXuu/zZvJmnG9O3SHglB+6vvbfj0rqB7MMnJdPLn9C1zea/oySEz2yr2WfU2r4X9hiTrlR01AQ46wsIu7aJq239EjKDqcJF8e79As5HYi7OHSgoKIlg6Vytjtkx9NDkjbCgVNuB0x8874VoBMqWKr0SzLE88iwmvbiX+HYGoA+OiVdCNhr9/dL4hnJdH0vwwpGn6z5s07ptstSFlON9rvHjLC6eb0A6wH3CNfEyXPdL83DZZWZU28IGIXWh2NPdJEcLgBcDgTkM7t7JHVCPz5GoLjqIIHSvb6qLzVK72HO+oTr401y9Ex9gIvLY5fc1G7Y52J53+8WuOtmXbto+rNOLtsEgvpD1V9zG0Fjp+EGUJ1HZqSDwxJQOmdI1P3ELYlbHWZ8ZN1rJGB0kbBiCf54mby/V9LmARa3s8dHoJA/+VSXtN3WK7y9xOEDL+I5LzoOXr7a7eik5NxQadi64fpybJ9Cbd7ZK+1twFQEl/W9nEtKDPczi4YHELQDrK7DAAAg8AXd/hdnpfiztWIfBjC0YISMo+WAKDYYIwsPj0raNpc52NqObdMxUnF9k4ReXxYOzvJlCCyL06fdiOVq9oWMpPem8p7fk4jdFnU9omlDJqftbMdIyksNNw4aPuNUoxMWhtbLexjxkBrz2iJt9w9I2uXo3fUDoG4I3BwXks2/IM+Ers8mWVfkiPfggAwAUE4d9vLlSEcZoKM8BOwF/9Rg2EfttFLfw1mLzZNH00ZPtbAi/1L8V02GB4G9D3Aw5mLPkS/p5rN7wZUt0vRznzjPgoUaBExDkDDc3nlOqf2lG3EU7/XpWzIQL6wUe5/1j/cbKR/K5JM0byDov1ifL5reUSnJdnbSSMqzDT8KI/baYXQBlA4E3FwL1b1C67VNwq8vSc0/dUrah3Kl4ofN0v26OQ/dh55eNyAMwNr5GUvJpBR8v9GIGUeAXmDj63I7zJNE0zs1lSAYvybvfWWG58k5w29sNzoASicDe952WYH1AmCBFY5JLYoXvTzrXqQP+XjLqGaf30j+cIZhq7e9aku1XYYyo2uARtNq6kvsS/xV1Rc9hu+17YYHgNE9eg8jdjpivmCS06BpqXza7TU8N2Rkfb7MvC2Tb/smyqg3i4qmaHp72pE6k3Vf3b/2Gd3GTsh2w3dsEVDNiV+9Am+Zt4iMwu82GTFT8Rw9v9mWYBvXx0ZTNP1fUyJ6c+dln1+yr+3uMSOE3mMAkPmMBaP6Nx4j6VQXJ+PdDre3VeePpmj6d6VUW6Ht1PLPdf2o+ic9T7vOy9mP3uTXYaFmsS/GzBJN0fSfS5yBEF2OMZqiKZqiKZqiKZqiKZqiKZqiKZqiKZqiKZqiKZqiKZqiKZqiKZqiKZqiKZqi6b8v2Wz/B05k/X8BC9JTAAAAAElFTkSuQmCC" alt="Matrix Vault" width="40" height="40" class="header-logo">
+                <h2>MATRIX VAULT<span class="pro-label">PRO</span></h2>
+            </div>
+            <div class="actions">
+                <button id="add-btn" class="action-btn" aria-label="Add new password"><span class="icon">+</span></button>
+                <button id="export-btn" class="action-btn" aria-label="Export vault"><span class="icon">↑</span></button>
+                <button id="import-btn" class="action-btn" aria-label="Import vault"><span class="icon">↓</span></button>
+                <button id="settings-btn" class="action-btn" aria-label="Settings"><span class="icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg></span></button>
+                <button id="logout-btn" class="action-btn" aria-label="Logout"><span class="icon">⏏</span></button>
+            </div>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search passwords...">
+            <div class="input-focus-line"></div>
+        </div>
+        
+        <div id="password-list" class="password-list"></div>
+        
+        <div class="status-bar">
+            <span id="vault-status">Secure: All entries encrypted</span>
+            <span id="entry-count">0 entries</span>
+        </div>
+    </div>
+
+    <div id="add-password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ADD NEW ENTRY</h3>
+                <button id="cancel-add-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="input-container">
+                <input type="text" id="new-title" placeholder="Title" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="text" id="new-username" placeholder="Username" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="password-input-container">
+                <input type="password" id="new-password" placeholder="Password" autocomplete="off">
+                <button id="new-toggle-password" class="toggle-password-btn">SHOW</button>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="password-strength" id="new-password-strength"></div>
+            <div class="password-meter">
+                <div id="password-meter-bar" class="password-meter-bar"></div>
+            </div>
+            <div class="input-container">
+                <input type="text" id="new-url" placeholder="URL (optional)" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <textarea id="new-notes" placeholder="Notes (optional)" autocomplete="off"></textarea>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="modal-buttons">
+                <button id="generate-password-btn" class="secondary-btn">GENERATE</button>
+                <button id="save-password-btn" class="primary-btn">SAVE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>EDIT ENTRY</h3>
+                <button id="cancel-edit-btn" class="close-btn">&times;</button>
+            </div>
+            <input type="hidden" id="edit-id">
+            <div class="input-container">
+                <input type="text" id="edit-title" placeholder="Title" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="text" id="edit-username" placeholder="Username" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="password-input-container">
+                <input type="password" id="edit-password" placeholder="Password" autocomplete="off">
+                <button id="edit-toggle-password" class="toggle-password-btn">SHOW</button>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="text" id="edit-url" placeholder="URL (optional)" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <textarea id="edit-notes" placeholder="Notes (optional)" autocomplete="off"></textarea>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="modal-buttons">
+                <button id="update-password-btn" class="primary-btn">UPDATE</button>
+                <button id="delete-password-btn" class="danger-btn">DELETE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="export-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>EXPORT VAULT</h3>
+                <button id="cancel-export-btn" class="close-btn">&times;</button>
+            </div>
+            <p class="modal-description">Enter a password to protect your exported data:</p>
+            <div class="input-container">
+                <input type="password" id="export-password" placeholder="Export Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="password" id="confirm-export-password" placeholder="Confirm Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="export-text-area" style="display: none;">
+                <p>Copy or download the encrypted vault data:</p>
+                <textarea id="export-text" readonly></textarea>
+                <div class="export-actions">
+                    <button id="copy-export-btn" class="secondary-btn copy-btn">COPY TEXT</button>
+                    <button id="download-export-btn" class="primary-btn">DOWNLOAD FILE</button>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="confirm-export-btn" class="primary-btn">ENCRYPT & EXPORT</button>
+            </div>
+            <div class="security-note">
+                <p>Your data will be encrypted with AES-256 and protected with a digital signature.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>IMPORT VAULT</h3>
+                <button id="cancel-import-btn" class="close-btn">&times;</button>
+            </div>
+            <p class="modal-description">Paste or upload your exported encrypted vault data:</p>
+            <div class="import-file-area">
+                <input type="file" id="import-file-input" accept=".json,text/plain" style="display:none">
+                <button id="import-file-btn" class="secondary-btn">SELECT FILE</button>
+                <span id="import-file-name" class="import-file-name"></span>
+            </div>
+            <div class="input-container">
+                <textarea id="import-text" placeholder="Paste encrypted vault data here..."></textarea>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="password-input-container">
+                <input type="password" id="import-password" placeholder="Export Password" autocomplete="off">
+                <button id="import-toggle-password" class="toggle-password-btn">SHOW</button>
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="modal-buttons">
+                <button id="confirm-import-btn" class="primary-btn">DECRYPT & IMPORT</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="password-detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="detail-title"></h3>
+                <button id="close-detail-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Username:</span>
+                <span id="detail-username" class="detail-value"></span>
+                <button class="copy-btn" data-field="username">COPY</button>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Password:</span>
+                <span id="detail-password" class="detail-value masked">••••••••</span>
+                <button class="toggle-btn" data-field="password">SHOW</button>
+                <button class="copy-btn" data-field="password">COPY</button>
+            </div>
+            <div class="detail-item" id="url-container">
+                <span class="detail-label">URL:</span>
+                <span id="detail-url" class="detail-value"></span>
+                <a id="detail-url-link" target="_blank" rel="noopener noreferrer">OPEN</a>
+            </div>
+            <div class="detail-item" id="notes-container">
+                <span class="detail-label">Notes:</span>
+                <div id="detail-notes" class="detail-value detail-notes"></div>
+            </div>
+            <div class="detail-info">
+                <span id="detail-created">Created: </span>
+                <span id="detail-updated">Updated: </span>
+            </div>
+            <div class="modal-buttons">
+                <button id="edit-entry-btn" class="primary-btn">EDIT</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>SETTINGS</h3>
+                <button id="close-settings-btn" class="close-btn">&times;</button>
+            </div>
+            
+            <div class="settings-section">
+                <h4>Security</h4>
+                <div class="setting-item">
+                    <button id="change-master-btn" class="settings-btn">CHANGE MASTER PASSWORD</button>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h4>Auto-Logout</h4>
+                <div class="setting-item">
+                    <label for="auto-logout">Automatically logout after inactivity:</label>
+                    <select id="auto-logout" class="settings-select">
+                        <option value="0">Never</option>
+                        <option value="1">1 minute</option>
+                        <option value="5">5 minutes</option>
+                        <option value="15">15 minutes</option>
+                        <option value="30">30 minutes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h4>Appearance</h4>
+                <div class="setting-item">
+                    <label for="animation-level">Animation Level:</label>
+                    <select id="animation-level" class="settings-select">
+                        <option value="full">Full Animations</option>
+                        <option value="minimal">Minimal Animations</option>
+                        <option value="none">No Animations</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h4>Backup</h4>
+                <div class="setting-item">
+                    <label for="auto-backup">Auto-backup after changes:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="auto-backup-toggle">
+                        <span class="switch-slider"></span>
+                    </label>
+                </div>
+                <div id="auto-backup-status" class="backup-status">Off</div>
+                <div class="setting-item" style="margin-top:10px">
+                    <button id="set-backup-password-btn" class="settings-btn">SET BACKUP PASSWORD</button>
+                </div>
+                <div id="backup-password-status" class="backup-status">Not set</div>
+            </div>
+
+            <div class="settings-section">
+                <h4>Data</h4>
+                <div class="setting-item">
+                    <button id="clear-data-btn" class="danger-btn">CLEAR ALL DATA</button>
+                </div>
+            </div>
+            
+            <div class="settings-section version-info">
+                <div class="security-info">
+                    <p><strong>Security:</strong> AES-256 encryption with PBKDF2 key derivation</p>
+                    <p><strong>Integrity:</strong> HMAC-SHA256 Digital Signatures</p>
+                </div>
+                <div class="copyright">
+                    <p>Matrix Vault Pro &copy; 2025</p>
+                    <p>Version 2.0.0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="change-master-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>CHANGE MASTER PASSWORD</h3>
+                <button id="cancel-change-master-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="input-container">
+                <input type="password" id="current-master" placeholder="Current Master Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="password" id="new-master" placeholder="New Master Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="input-container">
+                <input type="password" id="confirm-new-master" placeholder="Confirm New Master Password" autocomplete="off">
+                <div class="input-focus-line"></div>
+            </div>
+            <div class="password-strength" id="master-password-strength"></div>
+            <div class="password-meter">
+                <div id="master-password-meter-bar" class="password-meter-bar"></div>
+            </div>
+            <div class="modal-buttons">
+                <button id="confirm-change-master-btn" class="primary-btn">CHANGE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <div class="notification-icon"></div>
+            <div class="notification-message"></div>
+        </div>
+    </div>
+
+    <div id="logout-timer" class="logout-timer"></div>
+
+    
+    <script src="app.js"></script>
+<script>// Matrix Vault Pro - Secure Password Manager
+// Version 2.0.0 - Enhanced Security & Performance
+
+// Constants
+const STORAGE_KEY = 'matrix_vault_data';
+const VAULT_VERSION = '2.0.0';
+const DEFAULT_ITERATION_COUNT = 100000;
+const AES_KEY_SIZE = 256; // bits
+const ANIMATION_STORAGE_KEY = 'animation_level';
+const SECURITY_LEVEL_STORAGE_KEY = 'security_level';
+
+// App state
+let vault = {
+    passwords: [],
+    salt: null,
+    iv: null,
+    iterationCount: DEFAULT_ITERATION_COUNT,
+    version: VAULT_VERSION,
+    lastAccess: null
+};
+
+let masterKey = null;
+let currentActivePasswordId = null;
+let animationLevel = localStorage.getItem(ANIMATION_STORAGE_KEY) || 'full';
+let loginAttempts = 0;
+let loginLockedUntil = 0;
+let importAttempts = 0;
+let importLockedUntil = 0;
+let autoBackupEnabled = false;
+let autoBackupFileHandle = null;
+let sessionPassword = null; // stored in memory for auto-backup only (backup, not master)
+let backupPassword = null; // separate password for backup encryption
+
+// DOM Elements
+const elements = {
+    // Screens
+    loginScreen: document.getElementById('login-screen'),
+    vaultScreen: document.getElementById('vault-screen'),
+    
+    // Modals
+    addPasswordModal: document.getElementById('add-password-modal'),
+    editPasswordModal: document.getElementById('edit-password-modal'),
+    exportModal: document.getElementById('export-modal'),
+    importModal: document.getElementById('import-modal'),
+    passwordDetailModal: document.getElementById('password-detail-modal'),
+    settingsModal: document.getElementById('settings-modal'),
+    changeMasterModal: document.getElementById('change-master-modal'),
+    
+    // Login screen elements
+    masterPassword: document.getElementById('master-password'),
+    loginBtn: document.getElementById('login-btn'),
+    createVaultBtn: document.getElementById('create-vault-btn'),
+    changeMasterBtn: document.getElementById('change-master-btn'),
+    
+    // Vault screen elements
+    addBtn: document.getElementById('add-btn'),
+    exportBtn: document.getElementById('export-btn'),
+    importBtn: document.getElementById('import-btn'),
+    logoutBtn: document.getElementById('logout-btn'),
+    settingsBtn: document.getElementById('settings-btn'),
+    searchInput: document.getElementById('search-input'),
+    passwordList: document.getElementById('password-list'),
+    entryCount: document.getElementById('entry-count'),
+    vaultStatus: document.getElementById('vault-status'),
+    
+    // Add password modal elements
+    newTitle: document.getElementById('new-title'),
+    newUsername: document.getElementById('new-username'),
+    newPassword: document.getElementById('new-password'),
+    newTogglePassword: document.getElementById('new-toggle-password'),
+    newUrl: document.getElementById('new-url'),
+    newNotes: document.getElementById('new-notes'),
+    newPasswordStrength: document.getElementById('new-password-strength'),
+    passwordMeterBar: document.getElementById('password-meter-bar'),
+    generatePasswordBtn: document.getElementById('generate-password-btn'),
+    savePasswordBtn: document.getElementById('save-password-btn'),
+    cancelAddBtn: document.getElementById('cancel-add-btn'),
+    
+    // Edit password modal elements
+    editId: document.getElementById('edit-id'),
+    editTitle: document.getElementById('edit-title'),
+    editUsername: document.getElementById('edit-username'),
+    editPassword: document.getElementById('edit-password'),
+    editTogglePassword: document.getElementById('edit-toggle-password'),
+    editUrl: document.getElementById('edit-url'),
+    editNotes: document.getElementById('edit-notes'),
+    updatePasswordBtn: document.getElementById('update-password-btn'),
+    deletePasswordBtn: document.getElementById('delete-password-btn'),
+    cancelEditBtn: document.getElementById('cancel-edit-btn'),
+    
+    // Export modal elements
+    exportPassword: document.getElementById('export-password'),
+    confirmExportPassword: document.getElementById('confirm-export-password'),
+    confirmExportBtn: document.getElementById('confirm-export-btn'),
+    cancelExportBtn: document.getElementById('cancel-export-btn'),
+    exportText: document.getElementById('export-text'),
+    copyExportBtn: document.getElementById('copy-export-btn'),
+    
+    // Import modal elements
+    importText: document.getElementById('import-text'),
+    importPassword: document.getElementById('import-password'),
+    importTogglePassword: document.getElementById('import-toggle-password'),
+    confirmImportBtn: document.getElementById('confirm-import-btn'),
+    cancelImportBtn: document.getElementById('cancel-import-btn'),
+    
+    // Password detail modal elements
+    detailTitle: document.getElementById('detail-title'),
+    detailUsername: document.getElementById('detail-username'),
+    detailPassword: document.getElementById('detail-password'),
+    detailUrl: document.getElementById('detail-url'),
+    detailUrlLink: document.getElementById('detail-url-link'),
+    detailNotes: document.getElementById('detail-notes'),
+    detailCreated: document.getElementById('detail-created'),
+    detailUpdated: document.getElementById('detail-updated'),
+    urlContainer: document.getElementById('url-container'),
+    notesContainer: document.getElementById('notes-container'),
+    editEntryBtn: document.getElementById('edit-entry-btn'),
+    closeDetailBtn: document.getElementById('close-detail-btn'),
+    
+    // Settings modal elements
+    securityLevel: document.getElementById('security-level'),
+    closeSettingsBtn: document.getElementById('close-settings-btn'),
+    autoLogout: document.getElementById('auto-logout'),
+    clearDataBtn: document.getElementById('clear-data-btn'),
+    animationLevel: document.getElementById('animation-level'),
+    logoutTimer: document.getElementById('logout-timer'),
+    
+    // Change master password modal elements
+    currentMaster: document.getElementById('current-master'),
+    newMaster: document.getElementById('new-master'),
+    confirmNewMaster: document.getElementById('confirm-new-master'),
+    masterPasswordStrength: document.getElementById('master-password-strength'),
+    masterPasswordMeterBar: document.getElementById('master-password-meter-bar'),
+    confirmChangeMasterBtn: document.getElementById('confirm-change-master-btn'),
+    cancelChangeMasterBtn: document.getElementById('cancel-change-master-btn'),
+
+    // Backup password elements
+    setBackupPasswordBtn: document.getElementById('set-backup-password-btn'),
+    
+    // Other elements
+    notification: document.getElementById('notification'),
+    notificationMessage: document.querySelector('.notification-message'),
+    matrixBackground: document.getElementById('matrix-background'),
+    particlesBackground: document.getElementById('particles-background'),
+};
+
+// Utility Functions
+
+// Encrypt and sanitize text to prevent XSS attacks
+function sanitizeText(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Format date to readable format
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+}
+
+// UI helper functions
+function showModal(modalElement) {
+    if (!modalElement) return;
+    
+    // Add accessibility attributes
+    modalElement.setAttribute('role', 'dialog');
+    modalElement.setAttribute('aria-modal', 'true');
+    
+    // Reset any validation errors
+    modalElement.querySelectorAll('.input-error').forEach(el => el.remove());
+    
+    // If there's a close button, set focus to it for accessibility
+    const closeBtn = modalElement.querySelector('.close-btn');
+    if (closeBtn) {
+        setTimeout(() => closeBtn.focus(), 100);
+    }
+    
+    modalElement.classList.add('is-visible');
+    modalElement.classList.remove('is-hidden');
+    
+    // Add ESC key listener to close modal
+    document.addEventListener('keydown', handleEscKeyForModal);
+}
+
+function hideModal(modalElement) {
+    if (!modalElement) return;
+    modalElement.classList.remove('is-visible');
+    modalElement.classList.add('is-hidden');
+    
+    // Remove ESC key listener
+    document.removeEventListener('keydown', handleEscKeyForModal);
+}
+
+function handleEscKeyForModal(e) {
+    if (e.key === 'Escape') {
+        const visibleModal = document.querySelector('.modal.is-visible');
+        if (visibleModal) {
+            hideModal(visibleModal);
+        }
+    }
+}
+
+function showNotification(message, type = 'success', duration = 3000) {
+    elements.notificationMessage.textContent = message;
+    
+    // Set icon based on notification type
+    const iconElement = elements.notification.querySelector('.notification-icon');
+    
+    if (type === 'success') {
+        iconElement.style.backgroundColor = '#33ff33';
+        iconElement.style.mask = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E\") no-repeat 50% 50%";
+        iconElement.style.webkitMask = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E\") no-repeat 50% 50%";
+    } else if (type === 'error') {
+        iconElement.style.backgroundColor = '#ff3333';
+        iconElement.style.mask = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E\") no-repeat 50% 50%";
+        iconElement.style.webkitMask = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E\") no-repeat 50% 50%";
+    } else if (type === 'warning') {
+        iconElement.style.backgroundColor = '#ffcc00';
+        iconElement.style.mask = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E\") no-repeat 50% 50%";
+        iconElement.style.webkitMask = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E\") no-repeat 50% 50%";
+    }
+    
+    elements.notification.classList.add('show');
+    
+    // Clear any existing timeout
+    if (window.notificationTimeout) {
+        clearTimeout(window.notificationTimeout);
+    }
+    
+    // Set timeout to hide notification
+    window.notificationTimeout = setTimeout(() => {
+        elements.notification.classList.remove('show');
+    }, duration);
+}
+
+function setMeterLevel(meterElement, score) {
+    const clamped = Math.max(0, Math.min(6, Math.round(score)));
+    meterElement.className = meterElement.className.replace(/meter-\d+/g, '').trim();
+    meterElement.classList.add(`meter-${clamped}`);
+}
+
+function clearForm(formModal) {
+    const inputs = formModal.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        if (input.type !== 'hidden') {
+            input.value = '';
+        }
+    });
+    
+    // Reset any password strength indicators
+    const strengthIndicators = formModal.querySelectorAll('.password-strength');
+    strengthIndicators.forEach(indicator => {
+        indicator.textContent = '';
+        indicator.className = 'password-strength';
+    });
+    
+    // Reset meter bars
+    const meterBars = formModal.querySelectorAll('.password-meter-bar');
+    meterBars.forEach(bar => {
+        bar.className = 'password-meter-bar meter-0';
+    });
+}
+
+function showScreen(screenElement) {
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+    screenElement.classList.add('active');
+    
+    // If showing the vault screen, update the entry count
+    if (screenElement === elements.vaultScreen) {
+        updateEntryCount();
+    }
+}
+
+function updateEntryCount() {
+    if (elements.entryCount) {
+        elements.entryCount.textContent = `${vault.passwords.length} entries`;
+    }
+}
+
+// Toggle password visibility
+function togglePasswordVisibility(inputElement, buttonElement) {
+    if (inputElement.type === 'password') {
+        inputElement.type = 'text';
+        buttonElement.textContent = 'HIDE';
+    } else {
+        inputElement.type = 'password';
+        buttonElement.textContent = 'SHOW';
+    }
+}
+
+// Show/hide loading indicator with progress feedback
+function showLoader(message = 'Processing...', showProgress = false) {
+    if (document.getElementById('loader')) {
+        document.getElementById('loader').remove();
+    }
+    
+    const loaderElement = document.createElement('div');
+    loaderElement.id = 'loader';
+    loaderElement.className = 'loader is-flex';
+    
+    const loaderContent = document.createElement('div');
+    loaderContent.className = 'loader-content';
+    
+    const spinner = document.createElement('div');
+    spinner.className = 'loader-spinner';
+    
+    const messageElement = document.createElement('div');
+    messageElement.className = 'loader-message';
+    messageElement.textContent = message;
+    messageElement.id = 'loader-message';
+    
+    loaderContent.appendChild(spinner);
+    loaderContent.appendChild(messageElement);
+    
+    if (showProgress) {
+        const progressContainer = document.createElement('div');
+        progressContainer.className = 'loader-progress';
+        
+        const progressBar = document.createElement('div');
+        progressBar.className = 'loader-progress-bar';
+        progressBar.id = 'loader-progress-bar';
+        
+        progressContainer.appendChild(progressBar);
+        loaderContent.appendChild(progressContainer);
+    }
+    
+    loaderElement.appendChild(loaderContent);
+    document.body.appendChild(loaderElement);
+    
+    // Add fade-in effect
+    setTimeout(() => {
+        loaderElement.style.opacity = '1';
+    }, 10);
+}
+
+function updateLoaderProgress(percent) {
+    const progressBar = document.getElementById('loader-progress-bar');
+    if (progressBar) {
+        const score = Math.round((percent / 100) * 6);
+        progressBar.className = 'loader-progress-bar';
+        progressBar.classList.add(`meter-${Math.max(0, Math.min(6, score))}`);
+    }
+}
+
+function updateLoaderMessage(message) {
+    const messageElement = document.getElementById('loader-message');
+    if (messageElement) {
+        messageElement.textContent = message;
+    }
+}
+
+function hideLoader() {
+    const loaderElement = document.getElementById('loader');
+    if (loaderElement) {
+        // Add fade-out effect
+        loaderElement.style.opacity = '0';
+        setTimeout(() => {
+            loaderElement.remove();
+        }, 300);
+    }
+}
+
+// Crypto utility functions - Web Crypto API (AES-256-GCM authenticated encryption)
+function hexToBuffer(hex) {
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < hex.length; i += 2) {
+        bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+    }
+    return bytes;
+}
+
+function bufferToBase64(buffer) {
+    const bytes = new Uint8Array(buffer);
+    let binary = '';
+    for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+}
+
+function base64ToBuffer(base64) {
+    const binaryString = atob(base64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
+}
+
+async function deriveKey(password, salt, iterations = DEFAULT_ITERATION_COUNT) {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+        'raw',
+        enc.encode(password),
+        'PBKDF2',
+        false,
+        ['deriveKey']
+    );
+    return crypto.subtle.deriveKey(
+        {
+            name: 'PBKDF2',
+            salt: hexToBuffer(salt),
+            iterations: iterations,
+            hash: 'SHA-256'
+        },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+    );
+}
+
+async function encrypt(data, key, iv) {
+    const enc = new TextEncoder();
+    const jsonData = JSON.stringify(data);
+    const dataBuffer = enc.encode(jsonData);
+    const encryptedBuffer = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv: hexToBuffer(iv) },
+        key,
+        dataBuffer
+    );
+    return bufferToBase64(encryptedBuffer);
+}
+
+async function decrypt(encryptedData, key, iv) {
+    try {
+        let ciphertext;
+        // Legacy CryptoJS format: { ciphertext, hmac } - unsupported, must migrate first
+        if (typeof encryptedData === 'object' && encryptedData.hmac) {
+            return null; // legacy vaults must go through unlockVault migration
+        }
+        if (typeof encryptedData === 'object' && encryptedData.ciphertext) {
+            ciphertext = encryptedData.ciphertext;
+        } else if (typeof encryptedData === 'string') {
+            ciphertext = encryptedData;
+        } else {
+            return null;
+        }
+        const decryptedBuffer = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: hexToBuffer(iv) },
+            key,
+            base64ToBuffer(ciphertext)
+        );
+        const dec = new TextDecoder();
+        return JSON.parse(dec.decode(decryptedBuffer));
+    } catch (e) {
+        console.error("Decryption error:", e.message);
+        return null;
+    }
+}
+
+function generatePassword(length = 20, includeSymbols = true) {
+    const lowercase = "abcdefghijklmnopqrstuvwxyz";
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    const special = includeSymbols ? "!@#$%^&*()_+~`|}{[]:;?><,./-=" : "";
+    
+    let password = "";
+    const array = new Uint8Array(length);
+    window.crypto.getRandomValues(array);
+    
+    // Ensure we have one of each character type for complexity
+    password += lowercase[array[0] % lowercase.length];
+    password += uppercase[array[1] % uppercase.length];
+    password += numbers[array[2] % numbers.length];
+    
+    if (includeSymbols) {
+        password += special[array[3] % special.length];
+    }
+    
+    // Fill the rest with random characters from all sets
+    const allChars = lowercase + uppercase + numbers + special;
+    for (let i = (includeSymbols ? 4 : 3); i < length; i++) {
+        password += allChars[array[i] % allChars.length];
+    }
+    
+    // Fisher-Yates shuffle using cryptographically secure randomness
+    const arr = password.split('');
+    const rand = new Uint8Array(arr.length);
+    window.crypto.getRandomValues(rand);
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = rand[i] % (i + 1);
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr.join('');
+}
+
+function generateSalt() {
+    const array = new Uint8Array(32); // Increased from 16 to 32 bytes
+    window.crypto.getRandomValues(array);
+    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+function generateIV() {
+    const array = new Uint8Array(12); // 96-bit nonce for AES-GCM
+    window.crypto.getRandomValues(array);
+    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+// Vault management functions
+async function saveVault() {
+    if (!masterKey) {
+        showNotification('No master key available', 'error');
+        return;
+    }
+    
+    try {
+        showLoader('Saving vault...');
+        
+        // Add timestamp for when vault was last modified
+        const lastModified = new Date().toISOString();
+        
+        // Prepare the data to be encrypted
+        const data = {
+            passwords: vault.passwords,
+            version: VAULT_VERSION,
+            lastModified: lastModified
+        };
+        
+        updateLoaderMessage('Encrypting data...');
+        
+        // Encrypt the vault data (AES-256-GCM authenticated encryption)
+        const ciphertext = await encrypt(data, masterKey, vault.iv);
+        
+        updateLoaderMessage('Finalizing...');
+        
+        // Prepare the vault metadata (which will be stored unencrypted)
+        const vaultData = {
+            encrypted: ciphertext,
+            salt: vault.salt,
+            iv: vault.iv,
+            iterationCount: vault.iterationCount,
+            version: VAULT_VERSION,
+            lastAccess: new Date().toISOString()
+        };
+        
+        // Save to local storage
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(vaultData));
+        
+        updateEntryCount();
+        hideLoader();
+        
+        // Auto-backup after successful save
+        autoBackup();
+    } catch (error) {
+        console.error("Error saving vault:", error);
+        hideLoader();
+        showNotification('Error saving vault', 'error');
+    }
+}
+
+function loadVault() {
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    if (!storedData) return false;
+    
+    try {
+        const parsedData = JSON.parse(storedData);
+        vault.salt = parsedData.salt;
+        vault.iv = parsedData.iv;
+        vault.iterationCount = parsedData.iterationCount || DEFAULT_ITERATION_COUNT;
+        vault.version = parsedData.version || '2.0.0';
+        vault.lastAccess = parsedData.lastAccess || null;
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+async function unlockVault(password) {
+    if (!vault.salt || !vault.iv) return false;
+    
+    showLoader('Unlocking vault...', true);
+    
+    try {
+        // Update progress
+        updateLoaderProgress(20);
+        updateLoaderMessage('Deriving encryption key...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        masterKey = await deriveKey(password, vault.salt, vault.iterationCount);
+        
+        // Update progress
+        updateLoaderProgress(50);
+        updateLoaderMessage('Decrypting vault data...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        const storedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        const encrypted = storedData.encrypted;
+        let decryptedData;
+        
+        // Handle legacy CryptoJS format (with HMAC property) - migrate on access
+        if (typeof encrypted === 'object' && encrypted.hmac && typeof CryptoJS !== 'undefined') {
+            const legacyKey = CryptoJS.PBKDF2(password, vault.salt, {
+                keySize: AES_KEY_SIZE / 32,
+                iterations: vault.iterationCount,
+                hasher: CryptoJS.algo.SHA256
+            });
+            const bytes = CryptoJS.AES.decrypt(encrypted.ciphertext, legacyKey, {
+                iv: CryptoJS.enc.Hex.parse(vault.iv),
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            const str = bytes.toString(CryptoJS.enc.Utf8);
+            if (str && encrypted.hmac === CryptoJS.HmacSHA256(str, legacyKey).toString()) {
+                decryptedData = JSON.parse(str);
+            }
+        } else {
+            decryptedData = await decrypt(encrypted, masterKey, vault.iv);
+        }
+        
+        updateLoaderProgress(90);
+        updateLoaderMessage('Finalizing...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        updateLoaderProgress(100);
+        
+        if (decryptedData) {
+            vault.passwords = decryptedData.passwords || [];
+            
+            // Update last access time
+            storedData.lastAccess = new Date().toISOString();
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(storedData));
+            
+            hideLoader();
+            return true;
+        } else {
+            masterKey = null;
+            hideLoader();
+            return false;
+        }
+    } catch (error) {
+        console.error("Error unlocking vault:", error);
+        masterKey = null;
+        hideLoader();
+        return false;
+    }
+}
+
+async function createNewVault(password) {
+    try {
+        showLoader('Creating vault...', true);
+        
+        updateLoaderProgress(20);
+        updateLoaderMessage('Generating secure keys...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        // Generate salt and IV
+        vault.salt = generateSalt();
+        vault.iv = generateIV();
+        vault.passwords = [];
+        
+        // Get security level from settings with bounds validation
+        let iterationCount = parseInt(localStorage.getItem(SECURITY_LEVEL_STORAGE_KEY) || DEFAULT_ITERATION_COUNT);
+        if (isNaN(iterationCount) || iterationCount < DEFAULT_ITERATION_COUNT) {
+            iterationCount = DEFAULT_ITERATION_COUNT;
+        }
+        if (iterationCount > 600000) iterationCount = 600000; // upper bound for performance
+        vault.iterationCount = iterationCount;
+        
+        updateLoaderProgress(40);
+        updateLoaderMessage('Deriving encryption key...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        // Derive the master key
+        masterKey = await deriveKey(password, vault.salt, vault.iterationCount);
+        
+        updateLoaderProgress(80);
+        updateLoaderMessage('Saving empty vault...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        // Save the empty vault
+        await saveVault();
+        
+        updateLoaderProgress(100);
+        updateLoaderMessage('Vault created successfully!');
+        
+        // Delay to show success message
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        hideLoader();
+        return true;
+    } catch (error) {
+        console.error("Error creating vault:", error);
+        showNotification('Error creating vault', 'error');
+        hideLoader();
+        return false;
+    }
+}
+
+async function exportVault(exportPassword) {
+    showLoader('Preparing export...', true);
+    
+    try {
+        updateLoaderProgress(20);
+        updateLoaderMessage('Decrypting vault data...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        const storedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        const decryptedData = await decrypt(storedData.encrypted, masterKey, vault.iv);
+        
+        if (!decryptedData) {
+            hideLoader();
+            showNotification('Failed to decrypt vault for export', 'error');
+            return false;
+        }
+        
+        updateLoaderProgress(50);
+        updateLoaderMessage('Generating export keys...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        const exportSalt = generateSalt();
+        const exportIv = generateIV();
+        
+        updateLoaderProgress(70);
+        updateLoaderMessage('Encrypting export data...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        const exportKey = await deriveKey(exportPassword, exportSalt, DEFAULT_ITERATION_COUNT);
+        const exportCiphertext = await encrypt(decryptedData, exportKey, exportIv);
+        
+        updateLoaderProgress(90);
+        updateLoaderMessage('Finalizing export data...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        const exportData = {
+            encrypted: exportCiphertext,
+            salt: exportSalt,
+            iv: exportIv,
+            iterationCount: DEFAULT_ITERATION_COUNT,
+            version: VAULT_VERSION
+        };
+        
+        updateLoaderProgress(100);
+        updateLoaderMessage('Export completed!');
+        
+        // Delay to show success message
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        hideLoader();
+        return JSON.stringify(exportData);
+    } catch (error) {
+        console.error("Export error:", error);
+        showNotification('Export failed', 'error');
+        hideLoader();
+        return false;
+    }
+}
+
+async function doBackup(data, salt, iv) {
+    const exportKey = await deriveKey(backupPassword, salt, DEFAULT_ITERATION_COUNT);
+    const ciphertext = await encrypt(data, exportKey, iv);
+    const exportData = JSON.stringify({
+        encrypted: ciphertext, salt, iv,
+        iterationCount: DEFAULT_ITERATION_COUNT, version: VAULT_VERSION
+    });
+    if (window.showSaveFilePicker && autoBackupFileHandle) {
+        const w = await autoBackupFileHandle.createWritable();
+        await w.write(exportData);
+        await w.close();
+        return;
+    }
+    if (window.showSaveFilePicker) {
+        autoBackupFileHandle = await window.showSaveFilePicker({
+            suggestedName: `matrix-vault-backup-${new Date().toISOString().slice(0, 10)}.json`,
+            types: [{ description: 'Matrix Vault Backup', accept: { 'application/json': ['.json'] } }]
+        });
+        const w = await autoBackupFileHandle.createWritable();
+        await w.write(exportData);
+        await w.close();
+        updateBackupStatus('File selected');
+        return;
+    }
+    const blob = new Blob([exportData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `matrix-vault-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+async function autoBackup() {
+    if (!autoBackupEnabled || !masterKey) return;
+    if (!vault.passwords || vault.passwords.length === 0) return;
+    try {
+        const data = {
+            passwords: vault.passwords,
+            version: VAULT_VERSION,
+            lastModified: new Date().toISOString()
+        };
+        const exportSalt = generateSalt();
+        const exportIv = generateIV();
+
+        // First time: if no backup password, prompt to set one
+        if (!backupPassword) {
+            showSetBackupPasswordModal(async (pw) => {
+                if (!pw) { updateBackupStatus('Backup password not set'); return; }
+                // Now prompt for file location, then save
+                await doBackup(data, exportSalt, exportIv);
+            });
+            return;
+        }
+
+        // Has password but no file handle yet → prompt for location
+        await doBackup(data, exportSalt, exportIv);
+    } catch (e) {
+        console.error('Auto-backup failed:', e);
+        updateBackupStatus('Backup failed: ' + (e.message || 'unknown error'));
+    }
+}
+
+function updateBackupStatus(msg) {
+    const el = document.getElementById('auto-backup-status');
+    if (el) el.textContent = msg;
+}
+
+async function importVault(exportedText, importPassword) {
+    showLoader('Processing import...', true);
+    
+    try {
+        updateLoaderProgress(20);
+        updateLoaderMessage('Validating import data...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        let importData;
+        try {
+            importData = JSON.parse(exportedText);
+        } catch (e) {
+            hideLoader();
+            showNotification('Invalid import data format', 'error');
+            return false;
+        }
+        
+        updateLoaderProgress(40);
+        updateLoaderMessage('Deriving import key...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        const importKey = await deriveKey(
+            importPassword, 
+            importData.salt, 
+            importData.iterationCount || DEFAULT_ITERATION_COUNT
+        );
+        
+        updateLoaderProgress(70);
+        updateLoaderMessage('Decrypting import data...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        let decryptedData;
+        if (typeof importData.encrypted === 'object' && importData.encrypted.hmac && typeof CryptoJS !== 'undefined') {
+            const legacyKey = CryptoJS.PBKDF2(importPassword, importData.salt, {
+                keySize: AES_KEY_SIZE / 32,
+                iterations: importData.iterationCount || DEFAULT_ITERATION_COUNT,
+                hasher: CryptoJS.algo.SHA256
+            });
+            const bytes = CryptoJS.AES.decrypt(importData.encrypted.ciphertext, legacyKey, {
+                iv: CryptoJS.enc.Hex.parse(importData.iv),
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            const str = bytes.toString(CryptoJS.enc.Utf8);
+            if (str && importData.encrypted.hmac === CryptoJS.HmacSHA256(str, legacyKey).toString()) {
+                decryptedData = JSON.parse(str);
+            } else {
+                hideLoader();
+                showNotification('Invalid import password or corrupted data', 'error');
+                return false;
+            }
+        } else {
+            decryptedData = await decrypt(importData.encrypted, importKey, importData.iv);
+        }
+        
+        if (!decryptedData) {
+            hideLoader();
+            showNotification('Invalid import password or corrupted data', 'error');
+            return false;
+        }
+        
+        updateLoaderProgress(90);
+        updateLoaderMessage('Merging with existing vault...');
+        
+        // Delay to show loader
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        // Create a map of existing passwords by ID for quick lookup
+        const existingPasswordsMap = new Map();
+        vault.passwords.forEach(pwd => existingPasswordsMap.set(pwd.id, pwd));
+        
+        // Add imported passwords, updating existing ones if newer
+        if (decryptedData.passwords && Array.isArray(decryptedData.passwords)) {
+            decryptedData.passwords.forEach(importedPwd => {
+                // Check if password with this ID already exists
+                if (existingPasswordsMap.has(importedPwd.id)) {
+                    const existingPwd = existingPasswordsMap.get(importedPwd.id);
+                    
+                    // If imported password is newer, replace the existing one
+                    const existingUpdated = new Date(existingPwd.updatedAt || 0);
+                    const importedUpdated = new Date(importedPwd.updatedAt || 0);
+                    
+                    if (importedUpdated > existingUpdated) {
+                        existingPasswordsMap.set(importedPwd.id, importedPwd);
+                    }
+                } else {
+                    // New password, just add it
+                    existingPasswordsMap.set(importedPwd.id, importedPwd);
+                }
+            });
+        }
+        
+        // Convert map back to array
+        vault.passwords = Array.from(existingPasswordsMap.values());
+        
+        // Set backup password from import password BEFORE saveVault triggers autoBackup
+        if (importPassword) {
+            backupPassword = importPassword;
+            localStorage.setItem('backup_stored_password', importPassword);
+            localStorage.setItem('backup_password_user_set', 'true');
+            updateBackupPasswordStatus('Set');
+        }
+
+        await saveVault();
+        renderPasswordList(vault.passwords);
+        
+        updateLoaderProgress(100);
+        updateLoaderMessage('Import completed!');
+        
+        // Delay to show success message
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        hideLoader();
+        showNotification(`Vault imported successfully. Total entries: ${vault.passwords.length}`, 'success');
+        return true;
+    } catch (e) {
+        console.error("Import error:", e);
+        hideLoader();
+        showNotification('Error during import process', 'error');
+        return false;
+    }
+}
+
+function resetVault() {
+    // Clear sensitive data in memory
+    if (vault.passwords) {
+        vault.passwords.forEach(p => {
+            if (p.password) p.password = '';
+            if (p.username) p.username = '';
+            if (p.notes) p.notes = '';
+            if (p.url) p.url = '';
+        });
+        vault.passwords.length = 0;
+    }
+    masterKey = null;
+    vault = {
+        passwords: [],
+        salt: null,
+        iv: null,
+        iterationCount: DEFAULT_ITERATION_COUNT,
+        version: VAULT_VERSION,
+        lastAccess: null
+    };
+    currentActivePasswordId = null;
+    loginAttempts = 0;
+    loginLockedUntil = 0;
+    importAttempts = 0;
+    importLockedUntil = 0;
+    sessionPassword = null;
+    
+    // Clear password input fields
+    if (elements.masterPassword) elements.masterPassword.value = '';
+    if (elements.newPassword) elements.newPassword.value = '';
+    if (elements.editPassword) elements.editPassword.value = '';
+    if (elements.currentMaster) elements.currentMaster.value = '';
+    if (elements.newMaster) elements.newMaster.value = '';
+    if (elements.confirmNewMaster) elements.confirmNewMaster.value = '';
+    if (elements.exportPassword) elements.exportPassword.value = '';
+    if (elements.confirmExportPassword) elements.confirmExportPassword.value = '';
+    if (elements.importPassword) elements.importPassword.value = '';
+    
+    // Clear auto-logout timer
+    clearAutoLogout();
+}
+
+// Password handling functions
+function showPasswordDetails(id) {
+    const password = vault.passwords.find(p => p.id === id);
+    if (!password) return;
+    
+    currentActivePasswordId = id;
+    elements.detailTitle.textContent = sanitizeText(password.title);
+    elements.detailUsername.textContent = sanitizeText(password.username || '');
+    elements.detailPassword.textContent = '••••••••';
+    elements.detailPassword.classList.add('masked');
+    
+    // Update created/modified dates
+    if (password.createdAt) {
+        elements.detailCreated.textContent = `Created: ${formatDate(password.createdAt)}`;
+        elements.detailCreated.style.display = 'block';
+    } else {
+        elements.detailCreated.style.display = 'none';
+    }
+    
+    if (password.updatedAt) {
+        elements.detailUpdated.textContent = `Updated: ${formatDate(password.updatedAt)}`;
+        elements.detailUpdated.style.display = 'block';
+    } else {
+        elements.detailUpdated.style.display = 'none';
+    }
+    
+    if (password.url) {
+        elements.urlContainer.style.display = 'flex';
+        elements.detailUrl.textContent = sanitizeText(password.url);
+        let safeURL = password.url.startsWith('http') ? password.url : `https://${password.url}`;
+        try {
+            new URL(safeURL);
+            elements.detailUrlLink.href = safeURL;
+            elements.detailUrlLink.style.display = 'inline-flex';
+        } catch {
+            elements.detailUrlLink.style.display = 'none';
+        }
+        elements.detailUrlLink.setAttribute('rel', 'noopener noreferrer');
+    } else {
+        elements.urlContainer.style.display = 'none';
+    }
+    
+    if (password.notes) {
+        elements.notesContainer.style.display = 'flex';
+        elements.detailNotes.textContent = sanitizeText(password.notes);
+    } else {
+        elements.notesContainer.style.display = 'none';
+    }
+    
+    showModal(elements.passwordDetailModal);
+}
+
+function addPassword() {
+    const title = elements.newTitle.value.trim();
+    const username = elements.newUsername.value.trim();
+    const password = elements.newPassword.value;
+    const url = elements.newUrl.value.trim();
+    const notes = elements.newNotes.value.trim();
+    
+    if (!password) {
+        showNotification('Password is required', 'error');
+        return false;
+    }
+    
+    const now = new Date().toISOString();
+    const id = Date.now().toString();
+    vault.passwords.push({
+        id,
+        title: title || 'Unnamed Entry',
+        username: username || '',
+        password,
+        url,
+        notes,
+        createdAt: now,
+        updatedAt: now
+    });
+    
+    saveVault();
+    renderPasswordList(vault.passwords);
+    hideModal(elements.addPasswordModal);
+    clearForm(elements.addPasswordModal);
+    return true;
+}
+
+function updatePassword() {
+    const id = elements.editId.value;
+    const title = elements.editTitle.value.trim();
+    const username = elements.editUsername.value.trim();
+    const password = elements.editPassword.value;
+    const url = elements.editUrl.value.trim();
+    const notes = elements.editNotes.value.trim();
+    
+    if (!password) {
+        showNotification('Password is required', 'error');
+        return false;
+    }
+    
+    const index = vault.passwords.findIndex(p => p.id === id);
+    if (index !== -1) {
+        vault.passwords[index] = {
+            ...vault.passwords[index],
+            title: title || 'Unnamed Entry',
+            username: username || '',
+            password,
+            url,
+            notes,
+            updatedAt: new Date().toISOString()
+        };
+        
+        saveVault();
+        renderPasswordList(vault.passwords);
+        hideModal(elements.editPasswordModal);
+        showNotification('Password updated successfully');
+        return true;
+    }
+    
+    return false;
+}
+
+function deletePassword(id) {
+    // Create modal for confirmation
+    const confirmModal = document.createElement('div');
+    confirmModal.className = 'modal';
+    confirmModal.id = 'confirm-delete-modal';
+    confirmModal.style.display = 'block';
+    
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+    
+    const modalHeader = document.createElement('div');
+    modalHeader.className = 'modal-header';
+    
+    const title = document.createElement('h3');
+    title.textContent = 'CONFIRM DELETE';
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'close-btn';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.onclick = () => confirmModal.remove();
+    
+    modalHeader.appendChild(title);
+    modalHeader.appendChild(closeBtn);
+    
+    const message = document.createElement('p');
+    message.className = 'modal-description';
+    message.textContent = 'Are you sure you want to permanently delete this entry? This action cannot be undone.';
+    
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'modal-buttons';
+    
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'secondary-btn';
+    cancelBtn.textContent = 'CANCEL';
+    cancelBtn.onclick = () => confirmModal.remove();
+    
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'danger-btn';
+    deleteBtn.textContent = 'DELETE';
+    deleteBtn.onclick = () => {
+        vault.passwords = vault.passwords.filter(p => p.id !== id);
+        saveVault();
+        renderPasswordList(vault.passwords);
+        hideModal(elements.editPasswordModal);
+        confirmModal.remove();
+        showNotification('Password deleted successfully');
+    };
+    
+    buttonContainer.appendChild(cancelBtn);
+    buttonContainer.appendChild(deleteBtn);
+    
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(message);
+    modalContent.appendChild(buttonContainer);
+    confirmModal.appendChild(modalContent);
+    
+    document.body.appendChild(confirmModal);
+}
+
+function generateAndSetPassword() {
+    const length = 20;
+    const includeSymbols = true;
+    const password = generatePassword(length, includeSymbols);
+    elements.newPassword.value = password;
+    elements.newPassword.type = 'text';
+    elements.newTogglePassword.textContent = 'HIDE';
+    
+    // Update strength indicator
+    const strength = checkPasswordStrength(password);
+    elements.newPasswordStrength.textContent = `Strength: ${strength.label}`;
+    elements.newPasswordStrength.className = `password-strength strength-${strength.class}`;
+    
+    // Update meter
+    setMeterLevel(elements.passwordMeterBar, strength.score);
+}
+
+// UI functions
+function renderPasswordList(passwords, searchTerm = '') {
+    showLoader('Loading passwords...');
+    
+    setTimeout(() => {
+        const container = elements.passwordList;
+        container.innerHTML = '';
+        
+        const filteredPasswords = searchTerm 
+            ? passwords.filter(p => 
+                (p.title && p.title.toLowerCase().includes(searchTerm.toLowerCase())) || 
+                (p.username && p.username.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                (p.notes && p.notes.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                (p.url && p.url.toLowerCase().includes(searchTerm.toLowerCase())))
+            : passwords;
+        
+        // Sort passwords by newest first
+        filteredPasswords.sort((a, b) => {
+            const dateA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+            const dateB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+            return dateB - dateA;
+        });
+        
+        if (filteredPasswords.length === 0) {
+            const emptyMessage = document.createElement('div');
+            emptyMessage.className = 'empty-message';
+            emptyMessage.innerHTML = searchTerm 
+                ? 'No matching entries found. Try a different search term.'
+                : 'No passwords saved yet.<br>Click the + button to add your first password.';
+            container.appendChild(emptyMessage);
+            
+            // Update entry count
+            updateEntryCount();
+            
+            hideLoader();
+            return;
+        }
+        
+        // Create item elements with animation delay for staggered appearance
+        filteredPasswords.forEach((password, index) => {
+            const item = document.createElement('div');
+            item.className = 'password-item';
+            item.dataset.id = password.id;
+            
+            // Add animation delay for staggered appearance
+            if (animationLevel === 'full') {
+                item.style.animationDelay = `${index * 0.05}s`;
+            }
+            
+            const title = document.createElement('h4');
+            title.textContent = sanitizeText(password.title || 'Unnamed Entry');
+            
+            const username = document.createElement('p');
+            username.textContent = sanitizeText(password.username || 'No username');
+            
+            // Add password health indicator
+            const health = document.createElement('div');
+            health.className = 'password-health';
+            const passwordStrength = checkPasswordStrength(password.password);
+            
+            // Show password last updated date
+            let lastUpdated = '';
+            if (password.updatedAt) {
+                const date = new Date(password.updatedAt);
+                lastUpdated = ` · Updated: ${date.toLocaleDateString()}`;
+            }
+            
+            health.innerHTML = `
+                <span class="health-icon health-${passwordStrength.class}">●</span>
+                <span>${sanitizeText(passwordStrength.label)} password${sanitizeText(lastUpdated)}</span>
+            `;
+            
+            item.appendChild(title);
+            item.appendChild(username);
+            item.appendChild(health);
+            
+            item.addEventListener('click', () => {
+                showPasswordDetails(password.id);
+            });
+            
+            container.appendChild(item);
+        });
+        
+        // Update entry count
+        updateEntryCount();
+        
+        hideLoader();
+    }, 50);
+}
+
+// Password strength checker with enhanced algorithm
+function checkPasswordStrength(password) {
+    if (!password) return { score: 0, label: 'None', class: 'weak' };
+    
+    let score = 0;
+    
+    // Length check - more granular
+    if (password.length >= 16) score += 3;
+    else if (password.length >= 12) score += 2;
+    else if (password.length >= 8) score += 1;
+    
+    // Character variety checks
+    if (/[A-Z]/.test(password)) score += 1; // Uppercase
+    if (/[a-z]/.test(password)) score += 1; // Lowercase
+    if (/[0-9]/.test(password)) score += 1; // Numbers
+    if (/[^A-Za-z0-9]/.test(password)) score += 1; // Special chars
+    
+    // Pattern checks (reduce score for predictable patterns)
+    if (/(.)\1\1/.test(password)) score -= 1; // Repeated characters (e.g., "aaa")
+    if (/^(?:password|admin|123456|qwerty|welcome)/i.test(password)) score -= 2; // Common password prefixes
+    if (/(?:abcdef|qwerty|12345)/i.test(password)) score -= 1; // Sequential characters
+    
+    // Normalize score
+    if (score < 0) score = 0;
+    if (score > 6) score = 6;
+    
+    // Classify based on score
+    if (score >= 5) return { score, label: 'Strong', class: 'strong' };
+    if (score >= 3) return { score, label: 'Medium', class: 'medium' };
+    return { score, label: 'Weak', class: 'weak' };
+}
+
+// Matrix background effect
+function initMatrixBackground() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    document.getElementById('matrix-background').appendChild(canvas);
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const fontSize = 14;
+    const columns = Math.ceil(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+    
+    function getRandomChar() {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%\"'#&_(),.;:?!\\|{}<>[]^~";
+        return chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    
+    let lastDraw = 0;
+    const fps = 8; // Reduced from 12 to 8 to make it slower
+    const interval = 1000 / fps;
+    
+    function draw(timestamp) {
+        if (timestamp - lastDraw < interval) {
+            requestAnimationFrame(draw);
+            return;
+        }
+        
+        lastDraw = timestamp;
+        
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)'; // Reduced opacity from 0.04 to 0.03 for slower fade
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#0f0';
+        ctx.font = `${fontSize}px monospace`;
+        
+        for (let i = 0; i < drops.length; i++) {
+            const text = getRandomChar();
+            const x = i * fontSize;
+            const y = drops[i] * fontSize;
+            
+            // Vary brightness to create depth effect
+            const green = 100 + Math.floor(Math.random() * 156);
+            ctx.fillStyle = `rgba(0, ${green}, 0, ${0.7 + Math.random() * 0.3})`;
+            
+            ctx.fillText(text, x, y);
+            
+            if (y > canvas.height && Math.random() > 0.995) { // Reduced drop rate from 0.990 to 0.995
+                drops[i] = 0;
+            }
+            
+            drops[i]++;
+        }
+        
+        requestAnimationFrame(draw);
+    }
+    
+    requestAnimationFrame(draw);
+    
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const newColumns = Math.ceil(canvas.width / fontSize);
+        drops.length = newColumns;
+        for (let i = 0; i < newColumns; i++) {
+            if (drops[i] === undefined) drops[i] = 1;
+        }
+    });
+}
+
+// Particle background effect
+function initParticlesBackground() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    document.getElementById('particles-background').appendChild(canvas);
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const particlesArray = [];
+    const numberOfParticles = 70;
+    
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 1 - 0.5;
+            this.speedY = Math.random() * 1 - 0.5;
+            this.color = `rgba(0, ${150 + Math.floor(Math.random() * 100)}, 0, ${0.1 + Math.random() * 0.3})`;
+        }
+        
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            
+            if (this.x < 0 || this.x > canvas.width) this.speedX = -this.speedX;
+            if (this.y < 0 || this.y > canvas.height) this.speedY = -this.speedY;
+        }
+        
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+    
+    function init() {
+        for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push(new Particle());
+        }
+    }
+    
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+            particlesArray[i].draw();
+            
+            // Connect particles with lines
+            for (let j = i; j < particlesArray.length; j++) {
+                const dx = particlesArray[i].x - particlesArray[j].x;
+                const dy = particlesArray[i].y - particlesArray[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 100) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(0, ${150 + Math.floor(Math.random() * 100)}, 0, ${0.1 - distance/1000})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                    ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        
+        requestAnimationFrame(animate);
+    }
+    
+    init();
+    animate();
+    
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particlesArray.length = 0;
+        init();
+    });
+}
+
+// Auto-logout functions with improved timer display
+function setupAutoLogout(minutes) {
+    let inactivityTime = 0;
+    const intervalTime = 1; // seconds (changed from 10 to 1 for more granular timer)
+    const maxInactivity = minutes * 60; // convert to seconds
+    
+    // Reset the timer on user activity
+    const resetTimer = () => {
+        inactivityTime = 0;
+        // Hide the timer if it's showing
+        if (elements.logoutTimer.style.display === 'block') {
+            elements.logoutTimer.style.display = 'none';
+        }
+    };
+    
+    // Add event listeners for user activity
+    ['click', 'touchstart', 'mousemove', 'keypress', 'scroll'].forEach(event => {
+        document.addEventListener(event, resetTimer);
+    });
+    
+    // Clear any existing interval
+    clearAutoLogout();
+    
+    // Set up the new interval
+    window.autoLogoutInterval = setInterval(() => {
+        // Only increment timer if user is logged in
+        if (elements.vaultScreen.classList.contains('active')) {
+            inactivityTime += intervalTime;
+            
+            // Update the logout timer display
+            const timeLeft = maxInactivity - inactivityTime;
+            if (timeLeft <= 60 && elements.logoutTimer) { // Show countdown in last minute
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                elements.logoutTimer.textContent = `Auto-logout in: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                elements.logoutTimer.style.display = 'block';
+            }
+            
+            // Logout when time is up
+            if (inactivityTime >= maxInactivity) {
+                resetVault();
+                elements.masterPassword.value = '';
+                showScreen(elements.loginScreen);
+                showNotification('Auto-logged out due to inactivity', 'warning');
+                elements.logoutTimer.style.display = 'none';
+                inactivityTime = 0;
+            }
+        }
+    }, intervalTime * 1000);
+}
+
+function clearAutoLogout() {
+    if (window.autoLogoutInterval) {
+        clearInterval(window.autoLogoutInterval);
+    }
+    if (elements.logoutTimer) {
+        elements.logoutTimer.style.display = 'none';
+    }
+}
+
+// Apply animation level to the UI
+function applyAnimationLevel(level) {
+    document.body.classList.remove('minimal-animations', 'no-animations');
+    
+    switch (level) {
+        case 'minimal':
+            document.body.classList.add('minimal-animations');
+            break;
+        case 'none':
+            document.body.classList.add('no-animations');
+            break;
+        // 'full' is default, no class needed
+    }
+    
+    // Store the setting
+    localStorage.setItem(ANIMATION_STORAGE_KEY, level);
+    animationLevel = level;
+}
+
+// Function to change master password
+async function changeMasterPassword(currentPassword, newPassword) {
+    try {
+        showLoader('Verifying current password...', true);
+        
+        // Verify the current password first (unlockVault populates vault.passwords)
+        if (await unlockVault(currentPassword)) {
+            updateLoaderProgress(50);
+            updateLoaderMessage('Generating new security keys...');
+            
+            // Delay to show loader
+            await new Promise(resolve => setTimeout(resolve, 50));
+            
+            // Generate new salt
+            const newSalt = generateSalt();
+            vault.salt = newSalt;
+            
+            updateLoaderProgress(70);
+            updateLoaderMessage('Deriving new encryption key...');
+            
+            // Delay to show loader
+            await new Promise(resolve => setTimeout(resolve, 50));
+            
+            // Derive new master key
+            masterKey = await deriveKey(newPassword, newSalt, vault.iterationCount);
+            
+            updateLoaderProgress(90);
+            updateLoaderMessage('Saving vault with new password...');
+            
+            // Delay to show loader
+            await new Promise(resolve => setTimeout(resolve, 50));
+            
+            // Save the vault with the new key
+            await saveVault();
+            
+            updateLoaderProgress(100);
+            updateLoaderMessage('Password changed successfully!');
+            
+            // Delay to show success message
+            await new Promise(resolve => setTimeout(resolve, 300));
+            
+            hideLoader();
+            showNotification('Master password changed successfully', 'success');
+            return true;
+        } else {
+            hideLoader();
+            showNotification('Current password is incorrect', 'error');
+            return false;
+        }
+    } catch (error) {
+        console.error("Error changing master password:", error);
+        hideLoader();
+        showNotification('Error changing password', 'error');
+        return false;
+    }
+}
+
+// Show modal to set backup password (accepts optional callback)
+function showSetBackupPasswordModal(callback) {
+    const m = document.createElement('div');
+    m.className = 'modal is-visible';
+    const c = document.createElement('div');
+    c.className = 'modal-content';
+    const h = document.createElement('div');
+    h.className = 'modal-header';
+    const t = document.createElement('h3');
+    t.textContent = 'SET BACKUP PASSWORD';
+    const cb = document.createElement('button');
+    cb.className = 'close-btn';
+    cb.innerHTML = '&times;';
+    cb.onclick = () => { m.remove(); if (callback) callback(null); };
+    h.appendChild(t);
+    h.appendChild(cb);
+    const msg = document.createElement('p');
+    msg.className = 'modal-description';
+    msg.textContent = 'Enter a password to encrypt your automatic backups. This is separate from your master password.';
+    const i1 = document.createElement('div');
+    i1.className = 'password-input-container';
+    const inp1 = document.createElement('input');
+    inp1.type = 'password';
+    inp1.id = 'backup-pw-input';
+    inp1.placeholder = 'Backup Password';
+    const tog1 = document.createElement('button');
+    tog1.className = 'toggle-password-btn';
+    tog1.textContent = 'SHOW';
+    tog1.onclick = () => togglePasswordVisibility(inp1, tog1);
+    const fl1 = document.createElement('div');
+    fl1.className = 'input-focus-line';
+    i1.appendChild(inp1);
+    i1.appendChild(tog1);
+    i1.appendChild(fl1);
+    const i2 = document.createElement('div');
+    i2.className = 'input-container';
+    const inp2 = document.createElement('input');
+    inp2.type = 'password';
+    inp2.id = 'backup-pw-confirm';
+    inp2.placeholder = 'Confirm Backup Password';
+    const fl2 = document.createElement('div');
+    fl2.className = 'input-focus-line';
+    i2.appendChild(inp2);
+    i2.appendChild(fl2);
+    const bc = document.createElement('div');
+    bc.className = 'modal-buttons';
+    const cancel = document.createElement('button');
+    cancel.className = 'secondary-btn';
+    cancel.textContent = 'CANCEL';
+    cancel.onclick = () => { m.remove(); if (callback) callback(null); };
+    const save = document.createElement('button');
+    save.className = 'primary-btn';
+    save.textContent = 'SAVE';
+    save.onclick = () => {
+        const pw = inp1.value;
+        const cf = inp2.value;
+        if (!pw) { showNotification('Please enter a backup password', 'warning'); return; }
+        if (pw !== cf) { showNotification('Passwords do not match', 'error'); return; }
+        backupPassword = pw;
+        m.remove();
+        try {
+            localStorage.setItem('backup_stored_password', pw);
+            localStorage.setItem('backup_password_user_set', 'true');
+        } catch (e) {
+            console.error('Failed to save backup password to storage:', e);
+        }
+        updateBackupPasswordStatus('Set');
+        showNotification('Backup password updated', 'success');
+        if (callback) callback(pw);
+    };
+    bc.appendChild(cancel);
+    bc.appendChild(save);
+    c.appendChild(h);
+    c.appendChild(msg);
+    c.appendChild(i1);
+    c.appendChild(i2);
+    c.appendChild(bc);
+    m.appendChild(c);
+    document.body.appendChild(m);
+    setTimeout(() => inp1.focus(), 100);
+}
+
+function updateBackupPasswordStatus(msg) {
+    const el = document.getElementById('backup-password-status');
+    if (el) el.textContent = msg;
+}
+
+// Event listeners with enhanced functionality
+function setupEventListeners() {
+    // Login screen
+    elements.loginBtn.addEventListener('click', async () => {
+        const password = elements.masterPassword.value;
+        if (!password) {
+            showNotification('Please enter a password', 'warning');
+            elements.masterPassword.focus();
+            return;
+        }
+        
+        // Brute-force protection: exponential backoff
+        const now = Date.now();
+        if (now < loginLockedUntil) {
+            const wait = Math.ceil((loginLockedUntil - now) / 1000);
+            showNotification(`Too many attempts. Wait ${wait}s`, 'warning');
+            return;
+        }
+        
+        if (loadVault()) {
+            const success = await unlockVault(password);
+            if (success) {
+                loginAttempts = 0;
+                sessionPassword = password;
+                showScreen(elements.vaultScreen);
+                renderPasswordList(vault.passwords);
+                showNotification('Vault unlocked successfully', 'success');
+                elements.searchInput.focus();
+            } else {
+                loginAttempts++;
+                const delay = Math.min(2 * Math.pow(2, loginAttempts - 1), 60) * 1000;
+                loginLockedUntil = Date.now() + delay;
+                showNotification(`Incorrect password. Locked for ${Math.ceil(delay / 1000)}s`, 'error');
+                elements.masterPassword.value = '';
+                setTimeout(() => elements.masterPassword.focus(), delay);
+            }
+        } else {
+            showNotification('No vault found. Create a new one.', 'warning');
+        }
+    });
+    
+    elements.createVaultBtn.addEventListener('click', async () => {
+        const password = elements.masterPassword.value;
+        if (!password) {
+            showNotification('Please enter a password', 'warning');
+            elements.masterPassword.focus();
+            return;
+        }
+        
+        // Check password strength
+        const strength = checkPasswordStrength(password);
+        if (strength.score < 3) {
+            const confirm = window.confirm('Your master password is weak. It is strongly recommended to use a stronger password. Continue anyway?');
+            if (!confirm) {
+                return;
+            }
+        }
+        
+        const success = await createNewVault(password);
+        if (success) {
+            sessionPassword = password;
+            showScreen(elements.vaultScreen);
+            renderPasswordList(vault.passwords);
+            showNotification('New vault created successfully', 'success');
+            elements.searchInput.focus();
+        }
+    });
+    
+    elements.masterPassword.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            elements.loginBtn.click();
+        }
+    });
+    
+    // Password visibility toggles
+    if (elements.newTogglePassword) {
+        elements.newTogglePassword.addEventListener('click', () => {
+            togglePasswordVisibility(elements.newPassword, elements.newTogglePassword);
+        });
+    }
+    
+    if (elements.editTogglePassword) {
+        elements.editTogglePassword.addEventListener('click', () => {
+            togglePasswordVisibility(elements.editPassword, elements.editTogglePassword);
+        });
+    }
+    
+    if (elements.importTogglePassword) {
+        elements.importTogglePassword.addEventListener('click', () => {
+            togglePasswordVisibility(elements.importPassword, elements.importTogglePassword);
+        });
+    }
+    
+    // Password strength indicators
+    if (elements.newPassword) {
+        elements.newPassword.addEventListener('input', (e) => {
+            const password = e.target.value;
+            const strength = checkPasswordStrength(password);
+            
+            elements.newPasswordStrength.textContent = `Strength: ${strength.label}`;
+            elements.newPasswordStrength.className = `password-strength strength-${strength.class}`;
+            
+            // Update meter
+            setMeterLevel(elements.passwordMeterBar, strength.score);
+        });
+    }
+    
+    if (elements.newMaster) {
+        elements.newMaster.addEventListener('input', (e) => {
+            const password = e.target.value;
+            const strength = checkPasswordStrength(password);
+            
+            elements.masterPasswordStrength.textContent = `Strength: ${strength.label}`;
+            elements.masterPasswordStrength.className = `password-strength strength-${strength.class}`;
+            
+            // Update meter
+            setMeterLevel(elements.masterPasswordMeterBar, strength.score);
+        });
+    }
+    
+    // Vault screen
+    elements.addBtn.addEventListener('click', () => {
+        clearForm(elements.addPasswordModal);
+        showModal(elements.addPasswordModal);
+        setTimeout(() => elements.newTitle.focus(), 100);
+    });
+    
+    elements.exportBtn.addEventListener('click', () => {
+        clearForm(elements.exportModal);
+        document.querySelector('.export-text-area').style.display = 'none';
+        elements.confirmExportBtn.style.display = 'block';
+        showModal(elements.exportModal);
+        setTimeout(() => elements.exportPassword.focus(), 100);
+    });
+    
+    elements.importBtn.addEventListener('click', () => {
+        clearForm(elements.importModal);
+        showModal(elements.importModal);
+        setTimeout(() => elements.importText.focus(), 100);
+    });
+    
+    elements.logoutBtn.addEventListener('click', () => {
+        resetVault();
+        elements.masterPassword.value = '';
+        showScreen(elements.loginScreen);
+        showNotification('Logged out successfully', 'success');
+    });
+    
+    elements.searchInput.addEventListener('input', (e) => {
+        renderPasswordList(vault.passwords, e.target.value);
+    });
+    
+    // Add password modal
+    elements.generatePasswordBtn.addEventListener('click', generateAndSetPassword);
+    
+    elements.savePasswordBtn.addEventListener('click', () => {
+        if (addPassword()) {
+            showNotification('Password saved successfully', 'success');
+        }
+    });
+    
+    elements.cancelAddBtn.addEventListener('click', () => {
+        hideModal(elements.addPasswordModal);
+    });
+    
+    // Edit password modal
+    elements.updatePasswordBtn.addEventListener('click', () => {
+        if (updatePassword()) {
+            showNotification('Password updated successfully', 'success');
+        }
+    });
+    
+    elements.deletePasswordBtn.addEventListener('click', () => {
+        deletePassword(elements.editId.value);
+    });
+    
+    elements.cancelEditBtn.addEventListener('click', () => {
+        hideModal(elements.editPasswordModal);
+    });
+    
+    // Password detail modal
+    elements.closeDetailBtn.addEventListener('click', () => {
+        hideModal(elements.passwordDetailModal);
+    });
+    
+    elements.editEntryBtn.addEventListener('click', () => {
+        const password = vault.passwords.find(p => p.id === currentActivePasswordId);
+        if (!password) return;
+        
+        elements.editId.value = password.id;
+        elements.editTitle.value = password.title;
+        elements.editUsername.value = password.username || '';
+        elements.editPassword.value = password.password;
+        elements.editUrl.value = password.url || '';
+        elements.editNotes.value = password.notes || '';
+        
+        hideModal(elements.passwordDetailModal);
+        showModal(elements.editPasswordModal);
+        setTimeout(() => elements.editTitle.focus(), 100);
+    });
+    
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const field = btn.dataset.field;
+            const element = document.getElementById(`detail-${field}`);
+            const password = vault.passwords.find(p => p.id === currentActivePasswordId);
+            
+            if (element.classList.contains('masked')) {
+                element.textContent = password[field];
+                element.classList.remove('masked');
+                btn.textContent = 'HIDE';
+            } else {
+                element.textContent = '••••••••';
+                element.classList.add('masked');
+                btn.textContent = 'SHOW';
+            }
+        });
+    });
+    
+    // Copy to clipboard
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const field = btn.dataset.field;
+            const password = vault.passwords.find(p => p.id === currentActivePasswordId);
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(password[field])
+                    .then(() => {
+                        showNotification(`${field.charAt(0).toUpperCase() + field.slice(1)} copied to clipboard`, 'success');
+                    })
+                    .catch(() => {
+                        showNotification('Failed to copy to clipboard', 'error');
+                    });
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = password[field];
+                textarea.style.position = 'fixed';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    const message = successful 
+                        ? `${field.charAt(0).toUpperCase() + field.slice(1)} copied to clipboard` 
+                        : 'Failed to copy to clipboard';
+                    showNotification(message, successful ? 'success' : 'error');
+                } catch (err) {
+                    showNotification('Failed to copy to clipboard', 'error');
+                }
+                
+                document.body.removeChild(textarea);
+            }
+        });
+    });
+    
+    // Export modal
+    elements.confirmExportBtn.addEventListener('click', async () => {
+        const exportPassword = elements.exportPassword.value;
+        const confirmPassword = elements.confirmExportPassword.value;
+        
+        if (!exportPassword) {
+            showNotification('Please enter an export password', 'warning');
+            elements.exportPassword.focus();
+            return;
+        }
+        
+        if (exportPassword !== confirmPassword) {
+            showNotification('Passwords do not match', 'error');
+            elements.confirmExportPassword.focus();
+            return;
+        }
+        
+        const exportedData = await exportVault(exportPassword);
+        if (exportedData) {
+            // Show the text area with the exported data
+            document.querySelector('.export-text-area').style.display = 'block';
+            document.getElementById('export-text').value = exportedData;
+            elements.confirmExportBtn.style.display = 'none';
+            showNotification('Vault data ready for export', 'success');
+            
+            // Select the exported text for easy copying
+            setTimeout(() => {
+                elements.exportText.select();
+                elements.exportText.focus();
+            }, 100);
+        } else {
+            showNotification('Failed to export vault', 'error');
+        }
+    });
+
+    elements.copyExportBtn.addEventListener('click', () => {
+        const exportText = elements.exportText;
+        exportText.select();
+        
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(exportText.value)
+                .then(() => {
+                    showNotification('Export data copied to clipboard', 'success');
+                })
+                .catch(err => {
+                    showNotification('Could not copy text: ' + err.message, 'error');
+                });
+        } else {
+            try {
+                document.execCommand('copy');
+                showNotification('Export data copied to clipboard', 'success');
+            } catch (err) {
+                showNotification('Could not copy text: ' + err.message, 'error');
+            }
+        }
+    });
+
+    // Download export as file
+    const downloadExportBtn = document.getElementById('download-export-btn');
+    if (downloadExportBtn) {
+        downloadExportBtn.addEventListener('click', () => {
+            const text = elements.exportText.value;
+            if (!text) {
+                showNotification('No export data to download', 'warning');
+                return;
+            }
+            const blob = new Blob([text], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `matrix-vault-export-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showNotification('Export file downloaded', 'success');
+        });
+    }
+
+    elements.cancelExportBtn.addEventListener('click', () => {
+        hideModal(elements.exportModal);
+        // Reset the export form
+        document.querySelector('.export-text-area').style.display = 'none';
+        elements.exportText.value = '';
+        elements.confirmExportBtn.style.display = 'block';
+    });
+    
+    // Import modal - file upload
+    let importedFileHandle = null;
+    
+    if (window.showOpenFilePicker) {
+        // Use modern File System Access API for import (gives writable handle)
+        document.getElementById('import-file-btn').addEventListener('click', async () => {
+            try {
+                const [handle] = await window.showOpenFilePicker({
+                    types: [{ description: 'Matrix Vault Backup', accept: { 'application/json': ['.json', '.txt'] } }]
+                });
+                importedFileHandle = handle;
+                const file = await handle.getFile();
+                document.getElementById('import-file-name').textContent = file.name;
+                const text = await file.text();
+                elements.importText.value = text;
+                showNotification('File loaded. Enter the export password and import.', 'success');
+            } catch (e) {
+                if (e.name !== 'AbortError') console.error(e);
+            }
+        });
+    } else {
+        // Fallback for Firefox/Safari
+        const importFileInput = document.getElementById('import-file-input');
+        const importFileBtn = document.getElementById('import-file-btn');
+        const importFileName = document.getElementById('import-file-name');
+        if (importFileBtn && importFileInput) {
+            importFileBtn.addEventListener('click', () => importFileInput.click());
+            importFileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                document.getElementById('import-file-name').textContent = file.name;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    elements.importText.value = ev.target.result;
+                    showNotification('File loaded. Enter the export password and import.', 'success');
+                };
+                reader.onerror = () => {
+                    showNotification('Failed to read file', 'error');
+                };
+                reader.readAsText(file);
+            });
+        }
+    }
+    
+    elements.confirmImportBtn.addEventListener('click', async () => {
+        const importText = elements.importText.value.trim();
+        const importPassword = elements.importPassword.value;
+        
+        if (!importText) {
+            showNotification('Please paste the exported vault data', 'warning');
+            elements.importText.focus();
+            return;
+        }
+        
+        if (!importPassword) {
+            showNotification('Please enter the import password', 'warning');
+            elements.importPassword.focus();
+            return;
+        }
+
+        // Brute-force protection for import
+        const now = Date.now();
+        if (now < importLockedUntil) {
+            const wait = Math.ceil((importLockedUntil - now) / 1000);
+            showNotification(`Too many import attempts. Wait ${wait}s`, 'warning');
+            return;
+        }
+        
+        // Link handle BEFORE importVault so saveVault→autoBackup finds it
+        if (autoBackupEnabled && importedFileHandle) {
+            autoBackupFileHandle = importedFileHandle;
+        }
+
+        const result = await importVault(importText, importPassword);
+        if (result) {
+            importAttempts = 0;
+            hideModal(elements.importModal);
+            // Link auto-backup to the imported file handle (no dialog for File System API)
+            if (autoBackupEnabled) {
+                if (importedFileHandle) {
+                    // Already linked above — just confirm
+                    updateBackupStatus('Linked to imported file');
+                    showNotification('Auto-backup linked to imported file', 'success');
+                } else if (window.showSaveFilePicker) {
+                    // Text import or fallback — prompt for location
+                    try {
+                        autoBackupFileHandle = await window.showSaveFilePicker({
+                            suggestedName: `matrix-vault-backup-${new Date().toISOString().slice(0, 10)}.json`,
+                            types: [{ description: 'Matrix Vault Backup', accept: { 'application/json': ['.json'] } }]
+                        });
+                        updateBackupStatus('File linked');
+                        showNotification('Auto-backup linked to file', 'success');
+                    } catch(e) {
+                        if (e.name !== 'AbortError') console.error(e);
+                    }
+                } else {
+                    // No File System API at all — fallback to download
+                    autoBackup();
+                }
+            }
+            importedFileHandle = null;
+        } else {
+            importAttempts++;
+            const delay = Math.min(2 * Math.pow(2, importAttempts - 1), 60) * 1000;
+            importLockedUntil = Date.now() + delay;
+            showNotification(`Incorrect import password. Locked for ${Math.ceil(delay / 1000)}s`, 'error');
+        }
+    });
+    
+    elements.cancelImportBtn.addEventListener('click', () => {
+        hideModal(elements.importModal);
+        clearForm(elements.importModal);
+        const fn = document.getElementById('import-file-name');
+        if (fn) fn.textContent = '';
+        const fi = document.getElementById('import-file-input');
+        if (fi) fi.value = '';
+        importedFileHandle = null;
+    });
+    
+    // Settings button
+    if (elements.settingsBtn) {
+        elements.settingsBtn.addEventListener('click', () => {
+            // Refresh backup password status from storage
+            const savedBp = localStorage.getItem('backup_stored_password');
+            const userSet = localStorage.getItem('backup_password_user_set') === 'true';
+            if (savedBp && userSet) backupPassword = savedBp;
+            updateBackupPasswordStatus(backupPassword ? 'Set' : 'Not set');
+
+            showModal(elements.settingsModal);
+            
+            // Set current values
+            if (elements.securityLevel) {
+                const currentLevel = localStorage.getItem(SECURITY_LEVEL_STORAGE_KEY) || DEFAULT_ITERATION_COUNT.toString();
+                elements.securityLevel.value = currentLevel;
+            }
+            
+            if (elements.animationLevel) {
+                const currentLevel = localStorage.getItem(ANIMATION_STORAGE_KEY) || 'full';
+                elements.animationLevel.value = currentLevel;
+            }
+        });
+    }
+    
+    // Close settings
+    if (elements.closeSettingsBtn) {
+        elements.closeSettingsBtn.addEventListener('click', () => {
+            hideModal(elements.settingsModal);
+        });
+    }
+    
+    // Security level setting
+    if (elements.securityLevel) {
+        elements.securityLevel.addEventListener('change', (e) => {
+            let iterationCount = parseInt(e.target.value);
+            if (isNaN(iterationCount) || iterationCount < 10000) iterationCount = 100000;
+            if (iterationCount > 600000) iterationCount = 600000;
+            localStorage.setItem(SECURITY_LEVEL_STORAGE_KEY, iterationCount);
+            showNotification(`Security level updated. Will apply on next login.`, 'success');
+        });
+    }
+    
+    // Animation level setting
+    if (elements.animationLevel) {
+        elements.animationLevel.addEventListener('change', (e) => {
+            const level = e.target.value;
+            applyAnimationLevel(level);
+            showNotification(`Animation level set to ${level}`, 'success');
+        });
+    }
+    
+    // Auto-backup toggle
+    const autoBackupToggle = document.getElementById('auto-backup-toggle');
+    if (autoBackupToggle) {
+        autoBackupEnabled = localStorage.getItem('auto_backup_enabled') === 'true';
+        autoBackupToggle.checked = autoBackupEnabled;
+        updateBackupStatus(autoBackupEnabled ? 'On - will save after changes' : 'Off');
+        
+        autoBackupToggle.addEventListener('change', (e) => {
+            autoBackupEnabled = e.target.checked;
+            localStorage.setItem('auto_backup_enabled', autoBackupEnabled);
+            if (autoBackupEnabled) {
+                autoBackupFileHandle = null; // Reset so user picks new location
+                updateBackupStatus('On - will prompt for file on next change');
+                showNotification('Auto-backup enabled. Next change will ask for save location.', 'success');
+            } else {
+                updateBackupStatus('Off');
+                autoBackupFileHandle = null;
+                showNotification('Auto-backup disabled', 'success');
+            }
+        });
+    }
+    
+    // Set backup password
+    if (elements.setBackupPasswordBtn) {
+        const savedBackupPw = localStorage.getItem('backup_stored_password');
+        const userSet = localStorage.getItem('backup_password_user_set') === 'true';
+        if (savedBackupPw && userSet) backupPassword = savedBackupPw;
+        updateBackupPasswordStatus(backupPassword ? 'Set' : 'Not set');
+        elements.setBackupPasswordBtn.addEventListener('click', () => {
+            // Dedicated modal for changing backup password (bypasses showSetBackupPasswordModal)
+            const m = document.createElement('div');
+            m.className = 'modal is-visible';
+            m.innerHTML = '<div class="modal-content">' +
+                '<div class="modal-header"><h3>SET BACKUP PASSWORD</h3><button class="close-btn" id="bp-close">&times;</button></div>' +
+                '<p class="modal-description">Enter a new password for automatic backups.</p>' +
+                '<div class="input-container"><input type="password" id="bp-new" placeholder="New Backup Password"><div class="input-focus-line"></div></div>' +
+                '<div class="input-container"><input type="password" id="bp-confirm" placeholder="Confirm Password"><div class="input-focus-line"></div></div>' +
+                '<div class="modal-buttons"><button class="secondary-btn" id="bp-cancel">CANCEL</button><button class="primary-btn" id="bp-save">SAVE</button></div>' +
+                '</div>';
+            document.body.appendChild(m);
+            document.getElementById('bp-new').focus();
+            document.getElementById('bp-close').onclick = () => m.remove();
+            document.getElementById('bp-cancel').onclick = () => m.remove();
+            document.getElementById('bp-save').onclick = async () => {
+                const pw = document.getElementById('bp-new').value;
+                const cf = document.getElementById('bp-confirm').value;
+                if (!pw) { showNotification('Please enter a backup password', 'warning'); return; }
+                if (pw !== cf) { showNotification('Passwords do not match', 'error'); return; }
+                backupPassword = pw;
+                localStorage.setItem('backup_stored_password', pw);
+                localStorage.setItem('backup_password_user_set', 'true');
+                updateBackupPasswordStatus('Set');
+                m.remove();
+                showNotification('Backup password updated', 'success');
+                // Verify: force a backup with the new password to update the file
+                if (autoBackupEnabled && masterKey && autoBackupFileHandle && vault.passwords && vault.passwords.length > 0) {
+                    setTimeout(() => autoBackup(), 100);
+                }
+            };
+        });
+    }
+
+    // Clear all data
+    if (elements.clearDataBtn) {
+        elements.clearDataBtn.addEventListener('click', () => {
+            // Create modal for confirmation
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'modal';
+            confirmModal.style.display = 'block';
+            
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
+            
+            const modalHeader = document.createElement('div');
+            modalHeader.className = 'modal-header';
+            
+            const title = document.createElement('h3');
+            title.textContent = 'CONFIRM DATA DELETION';
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'close-btn';
+            closeBtn.innerHTML = '&times;';
+            closeBtn.onclick = () => confirmModal.remove();
+            
+            modalHeader.appendChild(title);
+            modalHeader.appendChild(closeBtn);
+            
+            const message = document.createElement('p');
+            message.className = 'modal-description';
+            message.innerHTML = '<strong>WARNING:</strong> This will permanently delete all your saved passwords and vault data. This action cannot be undone.<br><br>Type "DELETE" below to confirm:';
+            
+            const confirmInput = document.createElement('input');
+            confirmInput.type = 'text';
+            confirmInput.placeholder = 'Type DELETE to confirm';
+            confirmInput.className = 'input-container';
+            
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'modal-buttons';
+            
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'secondary-btn';
+            cancelBtn.textContent = 'CANCEL';
+            cancelBtn.onclick = () => confirmModal.remove();
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'danger-btn';
+            deleteBtn.textContent = 'DELETE ALL DATA';
+            deleteBtn.disabled = true;
+            
+            confirmInput.addEventListener('input', (e) => {
+                deleteBtn.disabled = e.target.value !== 'DELETE';
+            });
+            
+            deleteBtn.onclick = () => {
+                if (confirmInput.value === 'DELETE') {
+                    localStorage.clear();
+                    resetVault();
+                    showScreen(elements.loginScreen);
+                    confirmModal.remove();
+                    showNotification('All data has been permanently deleted', 'success');
+                }
+            };
+            
+            buttonContainer.appendChild(cancelBtn);
+            buttonContainer.appendChild(deleteBtn);
+            
+            modalContent.appendChild(modalHeader);
+            modalContent.appendChild(message);
+            modalContent.appendChild(confirmInput);
+            modalContent.appendChild(buttonContainer);
+            confirmModal.appendChild(modalContent);
+            
+            document.body.appendChild(confirmModal);
+        });
+    }
+    
+    // Auto-logout setting
+    if (elements.autoLogout) {
+        elements.autoLogout.addEventListener('change', (e) => {
+            const minutes = parseInt(e.target.value);
+            localStorage.setItem('auto_logout_minutes', minutes);
+            
+            if (minutes > 0) {
+                setupAutoLogout(minutes);
+                showNotification(`Auto-logout set to ${minutes} minute(s)`, 'success');
+            } else {
+                clearAutoLogout();
+                showNotification('Auto-logout disabled', 'success');
+            }
+        });
+        
+        // Load saved auto-logout setting
+        const savedMinutes = localStorage.getItem('auto_logout_minutes');
+        if (savedMinutes) {
+            elements.autoLogout.value = savedMinutes;
+            if (parseInt(savedMinutes) > 0) {
+                setupAutoLogout(parseInt(savedMinutes));
+            }
+        }
+    }
+    
+    // Change master password
+    if (elements.changeMasterBtn) {
+        elements.changeMasterBtn.addEventListener('click', () => {
+            hideModal(elements.settingsModal);
+            clearForm(elements.changeMasterModal);
+            showModal(elements.changeMasterModal);
+            setTimeout(() => elements.currentMaster.focus(), 100);
+        });
+    }
+    
+    if (elements.confirmChangeMasterBtn) {
+        elements.confirmChangeMasterBtn.addEventListener('click', async () => {
+            const currentPassword = elements.currentMaster.value;
+            const newPassword = elements.newMaster.value;
+            const confirmPassword = elements.confirmNewMaster.value;
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showNotification('All fields are required', 'warning');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showNotification('New passwords do not match', 'error');
+                return;
+            }
+            
+            const strength = checkPasswordStrength(newPassword);
+            if (strength.score < 3) {
+                const confirm = window.confirm('Your new password is weak. Are you sure you want to use it?');
+                if (!confirm) {
+                    return;
+                }
+            }
+            
+            const success = await changeMasterPassword(currentPassword, newPassword);
+            if (success) {
+                hideModal(elements.changeMasterModal);
+            }
+        });
+    }
+    
+    if (elements.cancelChangeMasterBtn) {
+        elements.cancelChangeMasterBtn.addEventListener('click', () => {
+            hideModal(elements.changeMasterModal);
+        });
+    }
+}
+
+// Initialize the application
+function init() {
+    // Enable auto-backup by default on first run
+    if (localStorage.getItem('auto_backup_enabled') === null) {
+        localStorage.setItem('auto_backup_enabled', 'true');
+    }
+    // Restore backup password only if user explicitly set it (not old auto-generated)
+    if (localStorage.getItem('backup_password_user_set') === 'true') {
+        const storedBp = localStorage.getItem('backup_stored_password');
+        if (storedBp) backupPassword = storedBp;
+    } else {
+        localStorage.removeItem('backup_stored_password');
+    }
+
+    // Load animation preferences
+    animationLevel = localStorage.getItem(ANIMATION_STORAGE_KEY) || 'full';
+    applyAnimationLevel(animationLevel);
+    
+    // Initialize backgrounds
+    initMatrixBackground();
+    if (animationLevel === 'full') {
+        initParticlesBackground();
+    }
+    
+    setupEventListeners();
+    
+    // Set Content Security Policy programmatically
+    const meta = document.createElement('meta');
+    meta.httpEquiv = 'Content-Security-Policy';
+    meta.content = "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self';";
+    document.head.appendChild(meta);
+    
+    // Check if there's a vault already
+    if (loadVault()) {
+        showScreen(elements.loginScreen);
+    } else {
+        showScreen(elements.loginScreen);
+        elements.createVaultBtn.style.display = 'block';
+    }
+}
+
+// Start the app when DOM is loaded
+document.addEventListener('DOMContentLoaded', init);</script></body>
+</html>
